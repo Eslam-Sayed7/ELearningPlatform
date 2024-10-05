@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Infrastructure.Dtos;
+using Infrastructure.Data.Services;
+using Infrastructure.Data.IServices;
+using Core.Entities;
 namespace TestApiJWT.Controllers
 {
     [Route("api/[controller]")]
@@ -11,10 +14,13 @@ namespace TestApiJWT.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IStudentService _studentService;
+        
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService , IStudentService studentService)
         {
             _authService = authService;
+            _studentService = studentService;
         }
 
         [Authorize]
@@ -31,10 +37,15 @@ namespace TestApiJWT.Controllers
                 return BadRequest(ModelState);
 
             var result = await _authService.RegisterUserAsync(model);
-
+            
             if (!result.IsAuthenticated)
                 return BadRequest(result.Message);
 
+            var student = new Student {
+                Appuser = result.User                
+            };
+
+            var addingStudent = await _studentService.CreateStudentAsync(student);
             return Ok(result);
         }
 

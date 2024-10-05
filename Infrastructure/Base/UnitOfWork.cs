@@ -88,32 +88,32 @@ public class UnitOfWork : IUnitOfWork , IDisposable
     {
         return await _context.SaveChangesAsync();
     }
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!_disposed)
-        {
-            if (disposing)
-            {
-                foreach (var repository in _repositories.Values)
-                {
-                    if (repository is IDisposable disposableRepository)
-                    {
-                        disposableRepository.Dispose();
-                    }
-                }
-
-                _context.Dispose();
-                _transaction?.Dispose();
-            }
-
-            _disposed = true;
-        }
-    }
+    // protected virtual void Dispose(bool disposing)
+    // {
+    //     if (!_disposed)
+    //     {
+    //         if (disposing)
+    //         {
+    //             foreach (var repository in _repositories.Values)
+    //             {
+    //                 if (repository is IDisposable disposableRepository)
+    //                 {
+    //                     disposableRepository.Dispose();
+    //                 }
+    //             }
+    //
+    //             _context.Dispose();
+    //             _transaction?.Dispose();
+    //         }
+    //
+    //         _disposed = true;
+    //     }
+    // }
 
     public void Dispose()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        // Dispose(true);
+        // GC.SuppressFinalize(this);
     }
 
    

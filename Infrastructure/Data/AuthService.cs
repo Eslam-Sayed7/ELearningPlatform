@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using Core.Entities;
 using Infrastructure.Data;
 using Infrastructure.Data.Services;
@@ -9,24 +10,28 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Infrastructure.Dtos;
+using Infrastructure.Data.IServices;
+using Infrastructure.Base;
 
 namespace Infrastructure.Services.Auth
-{
+{   
     public class AuthService : IAuthService
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JWT _jwt;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IStudentService _studentService;
         
         public AuthService(UserManager<AppUser> userManager, IOptions<JWT> jwt ,
-         RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor)
+         RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor , IUnitOfWork unitOfWork) 
         {
             _userManager = userManager;
             _jwt = jwt.Value;
             _roleManager = roleManager;
             _httpContextAccessor = httpContextAccessor;
+            _unitOfWork = unitOfWork;
+
         }
         
         public async Task<loggedUserDto> GetCurrentUser()
@@ -54,21 +59,36 @@ namespace Infrastructure.Services.Auth
 
         public async Task<AuthModel> RegisterUserAsync(RegisterModel model)
         {
+            if (model == null) throw new ArgumentNullException(nameof(model));
+            if (_userManager == null) throw new InvalidOperationException("UserManager is not initialized.");
+
+            if (string.IsNullOrWhiteSpace(model.Username) || !Regex.IsMatch(model.Username, @"^[a-zA-Z0-9]+$"))
+            {
+                return new AuthModel
+                {
+                    Message = "Username can only contain letters and digits and cannot be empty.",
+                    IsAuthenticated = false
+                };
+            }
+
             if(await _userManager.FindByEmailAsync(model.Email) is not  null)
                 return new AuthModel { Message = "Email is already registered", IsAuthenticated = false };
 
             if(await _userManager.FindByNameAsync(model.Username) is not  null)
                 return new AuthModel { Message = "UserName is already registered", IsAuthenticated = false };
             
-            var user = new AppUser {
-                UserName = model.Username,
+            var user = new AppUser
+            {
                 Email = model.Email,
+                UserName = model.Username,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
             var UserCreation = await _userManager.CreateAsync(user, model.Password);
-
+        
             var RoleSetting = await _userManager.AddToRoleAsync(user, "Student");
             
             if(!UserCreation.Succeeded || !RoleSetting.Succeeded){
@@ -81,20 +101,17 @@ namespace Infrastructure.Services.Auth
             }
             var jwtSecurityToken = await CreateJwtToken(user);
 
-            var student = new Student
-            {
-                Appuser = user
-            };
             
-            await _studentService.CreateStudentAsync(student);
+            user.RefreshTokenExpiryTime = jwtSecurityToken.ValidTo;
+            user.RefreshToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             
             return new AuthModel
             {
+                Message = $"User {user.Email} registered Successflly as User",
+                User = user,
                 Email = user.Email,
-                ExpiresOn = jwtSecurityToken.ValidTo,
                 IsAuthenticated = true,
                 Roles = new List<string> { "User" },
-                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
                 Username = user.UserName
             };
         }
@@ -113,12 +130,14 @@ namespace Infrastructure.Services.Auth
 
             var jwtSecurityToken = await CreateJwtToken(user);
             var rolesList = await _userManager.GetRolesAsync(user);
-            
+            if (authModel.User == null) {
+                authModel.User = new AppUser();
+            }
             authModel.IsAuthenticated = true;
-            authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            authModel.User.RefreshToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             authModel.Email = user.Email;
             authModel.Username = user.UserName;
-            authModel.ExpiresOn = jwtSecurityToken.ValidTo;
+            authModel.User.RefreshTokenExpiryTime = jwtSecurityToken.ValidTo;
             authModel.Roles = rolesList.ToList();
 
             return authModel;

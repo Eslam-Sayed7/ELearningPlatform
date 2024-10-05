@@ -2,7 +2,6 @@ using API.Extensions;
 using API.Extensions.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data;
-using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,6 +9,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Core.Entities;
 using Infrastructure.Services.Auth;
+using Infrastructure.Data.Services;
+using Infrastructure.Data.IServices;
+using Infrastructure.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,17 +23,21 @@ builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 builder.Services.AddDbContext<AppDbContext>(x =>
     x.UseSqlite(builder.Configuration.GetConnectionString("constr")));
 
-builder.Services.AddDbContext<AppIdentityDbContext>(x =>
+builder.Services.AddDbContext<AppDbContext>(x =>
     x.UseSqlite(builder.Configuration.GetConnectionString("constr")));
 
 // builder.Services.AddIdentityServices();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddIdentity<AppUser , IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<AppIdentityDbContext>()
+    .AddEntityFrameworkStores<AppDbContext>()
     .AddApiEndpoints();
 
 builder.Services.AddScoped<IAuthService , AuthService>();
+builder.Services.AddTransient<IStudentService , StudentService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAuthentication(options =>
 {

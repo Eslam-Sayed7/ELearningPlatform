@@ -22,7 +22,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
     public virtual DbSet<Course> Courses { get; set; }
     public virtual DbSet<Student> Students { get; set; }
     public virtual DbSet<Instructor> Instructors { get; set; }
-    public virtual DbSet<CourseContent> CourseContents { get; set; }
+    public virtual DbSet<CourseSection> CourseContents { get; set; }
     public virtual DbSet<CourseMaterial> CourseMaterials { get; set; }
     public virtual DbSet<TextContent> TextContents { get; set; }
     public virtual DbSet<Enrollment> Enrollments { get; set; }
@@ -42,7 +42,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
         modelBuilder.ApplyConfiguration(new InstructorsToCoursesConfiguration());
         modelBuilder.ApplyConfiguration(new CoursesConfiguration());
         modelBuilder.ApplyConfiguration(new EnrollmentsConfiguration());
-        modelBuilder.ApplyConfiguration(new CourseContentConfiguration());
+        modelBuilder.ApplyConfiguration(new CourseSectionConfiguration());
         modelBuilder.ApplyConfiguration(new CourseMaterialConfiguration());
         modelBuilder.ApplyConfiguration(new PaymensConfiguration());
         modelBuilder.ApplyConfiguration(new EnrollmentsConfiguration());

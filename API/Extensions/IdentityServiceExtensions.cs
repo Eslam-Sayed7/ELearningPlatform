@@ -2,7 +2,7 @@ using Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-using Infrastructure.Identity;
+using Infrastructure.Data;
 
 namespace API.Extensions
 {
@@ -35,7 +35,7 @@ namespace API.Extensions
 
             // Register EF stores and SignInManager
             builder = new IdentityBuilder(builder.UserType, builder.Services);
-            builder.AddEntityFrameworkStores<AppIdentityDbContext>();
+            builder.AddEntityFrameworkStores<AppDbContext>();
             builder.AddSignInManager<SignInManager<AppUser>>();
             return services;
         }

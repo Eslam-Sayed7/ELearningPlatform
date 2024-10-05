@@ -9,12 +9,12 @@ public class TextContentConfiguration : IEntityTypeConfiguration<TextContent>
         
         builder.HasKey(e => e.TextId);
 
-        builder.ToTable("Text_Contents");
-
+        builder.ToTable("TextContents");
+        builder.Property(e => e.Body).HasColumnName("Body").HasColumnType("TEXT");
         builder.Property(e => e.TextId).HasColumnName("TextID");
-        builder.Property(e => e.ContentId).HasColumnName("ContentID");
+        builder.Property(e => e.SectionId).HasColumnName("ContentID");
 
-        builder.HasOne(d => d.Content).WithMany(p => p.TextContents).HasForeignKey(d => d.ContentId);
+        builder.HasOne(d => d.Section).WithMany(p => p.TextContents).HasForeignKey(d => d.SectionId);
             
     }
 }

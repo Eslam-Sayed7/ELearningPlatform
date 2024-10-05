@@ -1,9 +1,9 @@
 ﻿namespace Core.Entities;
 public partial class Enrollment
 {
-    public Guid? EnrollmentId { get; set; }
+    public Guid EnrollmentId { get; set; }
 
-    public Guid? CourseId { get; set; }
+    public Guid CourseId { get; set; }
 
     public DateTime? EnrollmentDate { get; set; }
 
@@ -15,7 +15,7 @@ public partial class Enrollment
 
     public virtual Student Student { get; set; } = null!;
 
-    public virtual Course? Course { get; set; }
+    public virtual Course Course { get; set; }
 
     public virtual Payment Payment { get; set; } = null!;
     

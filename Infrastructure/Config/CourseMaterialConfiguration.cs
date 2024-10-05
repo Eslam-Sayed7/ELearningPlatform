@@ -7,18 +7,14 @@ public class CourseMaterialConfiguration : IEntityTypeConfiguration<CourseMateri
     public void Configure(EntityTypeBuilder<CourseMaterial> builder)
     {
                 
-            // course material is the external links
+                // course material is the external links for websites / PDFs / articles
                 builder.HasKey(e => e.MaterialId);
 
                 builder.ToTable("Course_Materials");
 
                 builder.Property(e => e.MaterialId).HasColumnName("MaterialID");
                 builder.Property(e => e.CourseId).HasColumnName("CourseID");
-                builder.Property(e => e.CreatedAt)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                    .HasColumnType("DATETIME");
                 builder.Property(e => e.FilePath).HasColumnType("VARCHAR(255)");
-                builder.Property(e => e.FileType).HasColumnType("VARCHAR(50)");
 
                 builder.HasOne(d => d.Course).WithMany(p => p.CourseMaterials).HasForeignKey(d => d.CourseId);
             

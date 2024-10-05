@@ -1,7 +1,6 @@
 ﻿using Core.Entities;
 using Infrastructure.Data;
 using Infrastructure.Dtos;
-using Infrastructure.Identity;
 using Infrastructure.Services.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
