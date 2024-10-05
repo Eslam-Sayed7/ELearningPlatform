@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Welcome Back</h1>
+                <p>Login to your account</p>
+            </div>
+            <form class="login-form">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <div class="password-container">
+                        <input type="password" id="password" required autocomplete="off">
+                        <span id="togglePassword" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn">Sign In</button>
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                <div class="oauth-buttons">
+                    <button class="oauth-btn google"><i class="fab fa-google"></i> Google</button>
+                    <button class="oauth-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+                    <button class="oauth-btn github"><i class="fab fa-github"></i> GitHub</button>
+                </div>
+            </form>
+            <div class="login-footer">
+                <p>Don't have an account? <a href="register.html">Register now</a></p>
+            </div>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('.login-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+                const data = {
+                    Email: document.getElementById('email').value,
+                    Password: document.getElementById('password').value,
+                };
+
+                try {
+                    const response = await fetch('http://localhost:5028/api/auth/token', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    });
+
+                    if (response.ok) {
+                        alert('Form submitted successfully!');
+                    } else {
+                        alert('Error submitting form.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

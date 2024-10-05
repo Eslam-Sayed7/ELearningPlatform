@@ -1,0 +1,382 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #EEEEEE;
+}
+
+/* Login Page Styles */
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.login-card {
+    background: #fff;
+    padding: 40px 30px;
+    width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.login-header p {
+    font-size: 14px;
+    color: #666;
+}
+
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #f9f9f9;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #393E46;
+}
+
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-container input {
+    width: 100%;
+    padding: 12px 45px 12px 15px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    background: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+.password-container input:focus {
+    border-color: #393E46;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: #00ADB5;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    background: #00ADB5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.login-btn:hover {
+    background: #00939b;
+}
+
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+}
+
+.divider span {
+    background: #fff;
+    padding: 0 10px;
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
+    color: #666;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #ddd;
+    z-index: 0;
+}
+
+.oauth-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.oauth-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.oauth-btn i {
+    margin-right: 8px;
+}
+
+.oauth-btn.google {
+    background: #dd4b39;
+}
+
+.oauth-btn.google:hover {
+    background: #bd4030;
+}
+
+.oauth-btn.facebook {
+    background: #3b5998;
+}
+
+.oauth-btn.facebook:hover {
+    background: #2d4373;
+}
+
+.oauth-btn.github {
+    background: #333;
+}
+
+.oauth-btn.github:hover {
+    background: #24292e;
+}
+
+.login-footer {
+    margin-top: 20px;
+}
+
+.login-footer p {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}
+
+.login-footer a {
+    color: #00ADB5;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Register Page Styles */
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.register-card {
+    background: #fff;
+    padding: 40px 30px;
+    width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.register-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.register-header p {
+    font-size: 14px;
+    color: #666;
+}
+
+.register-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.register-btn {
+    width: 100%;
+    padding: 15px;
+    background: #00ADB5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.register-btn:hover {
+    background: #00939b;
+}
+
+.register-footer {
+    margin-top: 20px;
+}
+
+.register-footer p {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}
+
+.register-footer a {
+    color: #00ADB5;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register-footer a:hover {
+    text-decoration: underline;
+}
+
+.name-field input {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #f9f9f9;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.name-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.input-group.name{
+    display: flex;
+    gap: 20px;
+}
+.name-field label {
+    font-size: 14px;
+    color: #666;
+    display: inline-block;
+}
+
+.name-field input:focus {
+    border-color: #393E46;
+}
+
+/* Container for progress bar */
+.password-strength {
+    width: 100%;
+    height: 8px;
+    background-color: #e0e0e0; /* Light gray background */
+    border-radius: 5px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0; /* Initially 0 width */
+    transition: width 0.3s; /* Smooth transition */
+    border-radius: 5px;
+}
+
+/* Colors for strength levels */
+.weak {
+    background-color: red;
+}
+
+.medium {
+    background-color: yellow;
+}
+
+.strong {
+    background-color: green;
+}
+
+#passwordStrengthText {
+    font-size: 14px;
+    margin-top: 5px;
+    color: gray; /* Text color for the strength text */
+}
+
