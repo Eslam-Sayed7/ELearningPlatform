@@ -1,12 +1,11 @@
-const passwordField = document.getElementById('password');
-const passwordBar = document.getElementById('passwordBar');
 const passwordStrengthText = document.getElementById('passwordStrengthText');
+const togglePasswordButton = document.getElementById('togglePassword');
+const passwordField = document.getElementById('password');
 
 passwordField.addEventListener('input', function () {
     const passwordValue = passwordField.value;
     let strength = 0;
 
-    // Criteria for password strength
     if (/[a-zA-Z]/.test(passwordValue)) strength += 1; // Contains letter
     if (/[0-9]/.test(passwordValue)) strength += 1; // Contains number
     if (passwordValue.length >= 8) strength += 1; // At least 8 characters
@@ -21,7 +20,7 @@ passwordField.addEventListener('input', function () {
         passwordBar.style.width = '66%';
         passwordBar.className = 'progress-bar medium';
         passwordStrengthText.textContent = 'Medium password';
-        passwordStrengthText.style.color = 'yellow';
+        passwordStrengthText.style.color = 'rgb(230, 230, 0)';
     } else if (strength === 3) {
         passwordBar.style.width = '100%';
         passwordBar.className = 'progress-bar strong';
@@ -35,6 +34,7 @@ passwordField.addEventListener('input', function () {
 
 
 // password reveal
+
 togglePasswordButton.addEventListener('click', () => {
     const type = passwordField.type === 'password' ? 'text' : 'password';
     passwordField.type = type;

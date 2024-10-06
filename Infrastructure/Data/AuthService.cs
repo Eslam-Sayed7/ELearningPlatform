@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Infrastructure.Dtos;
 using Infrastructure.Data.IServices;
 using Infrastructure.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.Auth
 {   
@@ -71,12 +72,12 @@ namespace Infrastructure.Services.Auth
                 };
             }
 
-            if(await _userManager.FindByEmailAsync(model.Email) is not  null)
+            if (await _userManager.FindByEmailAsync(model.Email) is not null)
                 return new AuthModel { Message = "Email is already registered", IsAuthenticated = false };
 
-            if(await _userManager.FindByNameAsync(model.Username) is not  null)
+            if (await _userManager.FindByNameAsync(model.Username) is not null)
                 return new AuthModel { Message = "UserName is already registered", IsAuthenticated = false };
-            
+
             var user = new AppUser
             {
                 Email = model.Email,
@@ -88,23 +89,25 @@ namespace Infrastructure.Services.Auth
             };
 
             var UserCreation = await _userManager.CreateAsync(user, model.Password);
-        
+
             var RoleSetting = await _userManager.AddToRoleAsync(user, "Student");
-            
-            if(!UserCreation.Succeeded || !RoleSetting.Succeeded){
+
+            if (!UserCreation.Succeeded || !RoleSetting.Succeeded)
+            {
 
                 var errors = string.Empty;
-                foreach(var error in ((!UserCreation.Succeeded)? UserCreation : RoleSetting).Errors){
+                foreach (var error in ((!UserCreation.Succeeded) ? UserCreation : RoleSetting).Errors)
+                {
                     errors += $"{error.Description},";
                 }
-                return new  AuthModel { Message = errors};
+                return new AuthModel { Message = errors };
             }
             var jwtSecurityToken = await CreateJwtToken(user);
 
-            
+
             user.RefreshTokenExpiryTime = jwtSecurityToken.ValidTo;
             user.RefreshToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            
+
             return new AuthModel
             {
                 Message = $"User {user.Email} registered Successflly as User",
@@ -115,6 +118,7 @@ namespace Infrastructure.Services.Auth
                 Username = user.UserName
             };
         }
+
 
         public async Task<AuthModel> LoginAsync(TokenRequestModel model)
         {
