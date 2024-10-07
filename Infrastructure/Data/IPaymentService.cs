@@ -1,6 +1,6 @@
 using Core.Entities;
 
-namespace Infrastructure.Services.Pay;
+namespace Infrastructure.Data;
 
 public interface IPaymentService
 {

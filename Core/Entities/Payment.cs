@@ -19,7 +19,7 @@ public partial class Payment
     public double Amount { get; set; }
 
     public PaymentStatus? paymentStatus { get; set; }
-    public string TransactionDate { get; set; } = null!;
+    public DateTime TransactionDate { get; set; } 
 
     public double? Discount { get; set; }
 

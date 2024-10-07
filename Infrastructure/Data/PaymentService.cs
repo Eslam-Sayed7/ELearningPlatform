@@ -3,7 +3,7 @@ using Core.Entities;
 using Core.Enums;
 using Infrastructure.Base;
 
-namespace Infrastructure.Services.Pay;
+namespace Infrastructure.Data;
 
 public class PaymentService : IPaymentService
 {
@@ -23,22 +23,23 @@ public class PaymentService : IPaymentService
         throw new NotImplementedException();
     }
 
-    public async Task<Payment> ProcessPaymentAsync(Guid studentId, Guid courseId, double amount
-        , double discount = 0)
+    public async Task<Payment> ProcessPaymentAsync(Guid studentId, Guid courseId, double amount, double discount = 0)
     {
-        var payment = new Payment {
+        var payment = new Payment
+        {
+            PaymentId = Guid.NewGuid(),
             StudentId = studentId,
             CourseId = courseId,
             Amount = amount,
-            // PaymentMethod = paymentMethod,
             Discount = discount,
+            TransactionDate = DateTime.UtcNow,
+            paymentStatus = PaymentStatus.Pending
         };
 
         await _unitOfWork.Repository<Payment>().AddAsync(payment);
-        
         payment.paymentStatus = PaymentStatus.Completed;
         await _unitOfWork.CompleteAsync();
-        
+
         return payment;
     }
 
