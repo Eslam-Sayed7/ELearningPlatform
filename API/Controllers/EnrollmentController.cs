@@ -22,30 +22,24 @@ namespace CourseAPIFinale.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             var enrollmentResult = await _enrollService.EnrollInCourse(request.CourseId, request.UserId);
-
-
             EnrollmentDto enroll = new EnrollmentDto
             {
                 Message = enrollmentResult.Message
             };
-
             return Ok(enroll);
         }
 
 
 
-        [HttpGet("{id}")]
+        [HttpGet()]
         public async Task<ActionResult<Enrollment>> GetEnrollment([FromBody] EnrollmentRequestDto request)
         {
             var enrollment = await _enrollService.CheckEnrollmentStatusAsync(request.UserId , request.CourseId);
-
             if (enrollment == false)
             {
                 return NotFound();
             }
-
             return Ok(enrollment);
         }
     }

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="text-center mb-4">
+                    <div class="profile-pic">
+                        <div class="initials bg-secondary text-white fs-1 rounded-circle" id = "userProfilePic">
+                            MH
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="Mainpage.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="Photo.html">Photo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Enrollments.html">Enrollments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Account Security</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Subscriptions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Payment methods</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Privacy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Close account</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <h1>Photo</h1>
+                <p>Add a nice photo of yourself for your profile.</p>
+                
+                <form id="uploadForm">
+                    <div class="mb-3">
+                        <label for="profileImage" class="form-label">Upload a Profile Picture</label>
+                        <input type="file" class="form-control" id="profileImage" accept="image/*" onchange="loadImage(event)">
+                    </div>
+                    <div class="text-center">
+                        <img id="previewImage" src="#" alt="Your profile picture" style="display:none; width:120px; height:120px; object-fit:cover; border-radius:50%;">
+                    </div>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            loadImage();
+        });
+        async function loadImage() {
+            const ProfileDetailsModel = {
+                id : localStorage.getItem("id")
+            };
+            // debugger
+            const response = await fetch('http://localhost:5164/api/Profile/Details', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(ProfileDetailsModel),
+            });
+            const result = await response.json();
+            // debugger
+            const ImageUrl = result.profilePictureUrl;
+            const profilePicDiv = document.getElementById('userProfilePic');
+
+            if (ImageUrl) {
+                // debugger
+                profilePicDiv.innerHTML = `<img src="${ImageUrl}" alt="Profile Picture" style="width: 120px; height: 120px; border-radius: 50%;">`;
+            } else {
+              alert("You need to upload an Image for you profile");
+            }
+        }
+        
+        document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+    
+            const fileInput = document.getElementById('profileImage');
+            const file = fileInput.files[0];
+    
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+            
+            const photo = new FormData();
+            photo.append('Id', localStorage.getItem("id"));
+            photo.append('file', file);
+            
+            try {
+                const response = await fetch('http://localhost:5164/api/Profile/Upload', {
+                method: 'POST',
+                body: photo
+                });
+                const result = await response.json();
+                console.log(result);
+                if (response.ok) {
+                    alert('File uploaded successfully.');
+                    const newImageUrl = result.url;
+                    const profilePicDiv = document.getElementById('userProfilePic');
+                    if (profilePicDiv) {
+                        profilePicDiv.innerHTML = `<img src="${newImageUrl}" alt="Profile Picture" style="width: 120px; height: 120px; border-radius: 50%;">`;
+                    } else {
+                        console.error("Profile picture div not found.");
+                    }
+        
+                } else {
+                    alert('File was not uploaded successfully.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+
+</html>

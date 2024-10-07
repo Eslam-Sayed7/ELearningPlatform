@@ -17,9 +17,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     }
 
-    public async Task<T> GetByIdAsync(int id)
+    public async Task<T> GetByIdAsync(Guid id)
     {
-        return await _context.Set<T>().FindAsync(new object[] { id }); 
+        return await _dbSet.FindAsync(new object[] { id }); 
     }
 
     public async Task<IReadOnlyList<T>> ListAllAsync()
@@ -37,6 +37,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return await ApplySpecification(spec).ToListAsync();
     }
 
+    public async Task UpdateEntity(T entity)
+    {
+        _dbSet.Update(entity);
+        await Task.CompletedTask;
+    }
     public IQueryable<T> ApplySpecification(ISpecification<T> spec)
     {
         return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);

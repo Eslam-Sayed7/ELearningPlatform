@@ -1,6 +1,26 @@
-@API_HostAddress = http://localhost:5164
+### Login Endpoint
+POST http://localhost:5164/api/auth/login
+Content-Type: application/json
 
-GET {{API_HostAddress}}/weatherforecast/
-Accept: application/json
+{
+  "email": "Mariam@gmail.com",
+  "password": "Pa$$w0rd"
+}
 
-###
+### Register Endpoint
+POST http://localhost:5164/api/auth/register
+Content-Type: application/json
+
+{
+  "firstname": "Mano",
+  "secondname": "Nano",
+  "email": "Mano@gmail.com",
+  "username" : "Mano",
+  "password": "Pa$$w0rd",
+  "confirmPassword": "Pa$$w0rd"
+}
+
+
+#### Get User Info Endpoint
+#GET http://localhost:5164/api/user/12345
+#Authorization: Bearer <your_token_here>

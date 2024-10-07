@@ -17,7 +17,7 @@ namespace CourseAPIFinale.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Course>> GetCourseById(int id)
+        public async Task<ActionResult<Course>> GetCourseById(Guid id)
         {
             var course = await _context.Courses.FindAsync(id);
 
@@ -28,6 +28,7 @@ namespace CourseAPIFinale.Controllers
 
             var courseDto = new Course
             {
+                
                 CourseName = course.CourseName,
                 Description = course.Description,
                 Level = course.Level,

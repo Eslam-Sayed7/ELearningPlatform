@@ -3,7 +3,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */ /*try this font*/
+    font-family: "Montserrat", sans-serif;
 }
 
 
@@ -43,7 +44,8 @@ body {
 }
 
 .login-header h1 {
-    font-size: 24px;
+    font-family: "Playfair Display", serif;
+    font-size: 36px;
     font-weight: 600;
     margin-bottom: 10px;
     color: #333;
@@ -117,13 +119,13 @@ body {
 }
 
 .toggle-password:hover {
-    color: #00ADB5;
+    color: #7c32ff;
 }
 
 .login-btn {
     width: 100%;
     padding: 15px;
-    background: #00ADB5;
+    background: #7c32ff;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -135,7 +137,7 @@ body {
 }
 
 .login-btn:hover {
-    background: #00939b;
+    background: #5b25b8;
 }
 
 .divider {
@@ -223,7 +225,7 @@ body {
 }
 
 .login-footer a {
-    color: #00ADB5;
+    color: #7c32ff;
     text-decoration: none;
     font-weight: 600;
 }
@@ -259,7 +261,8 @@ body {
 }
 
 .register-header h1 {
-    font-size: 24px;
+    font-family: "Playfair Display", serif;
+    font-size: 29px;
     font-weight: 600;
     margin-bottom: 10px;
     color: #333;
@@ -279,7 +282,7 @@ body {
 .register-btn {
     width: 100%;
     padding: 15px;
-    background: #00ADB5;
+    background: #7c32ff;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -291,7 +294,7 @@ body {
 }
 
 .register-btn:hover {
-    background: #00939b;
+    background: #5b25b8;
 }
 
 .register-footer {
@@ -305,7 +308,7 @@ body {
 }
 
 .register-footer a {
-    color: #00ADB5;
+    color: #7c32ff;
     text-decoration: none;
     font-weight: 600;
 }
@@ -379,4 +382,3 @@ body {
     margin-top: 5px;
     color: gray; /* Text color for the strength text */
 }
-

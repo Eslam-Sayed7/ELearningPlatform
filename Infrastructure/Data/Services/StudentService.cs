@@ -1,5 +1,6 @@
 using Core.Entities;
 using Infrastructure.Base;
+using Infrastructure.Data.Models;
 using Infrastructure.Data.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +16,19 @@ public class StudentService : IStudentService
         _unitOfWork = unitOfWork;
     }
     
+    public async Task<Student> UpdateStudentAsync(UpdateUserModel model)
+    {
+
+        var students = await _unitOfWork.Repository<Student>()
+            .FindAsync(s => s.Id == model.Id , include: q => q.Include(s => s.Appuser));
+        var student = students.FirstOrDefault();
+        student.Appuser.FirstName = model.FirstName;
+        student.Appuser.LastName = model.LastName;
+        await _unitOfWork.Repository<Student>().UpdateEntity(student);
+        await _unitOfWork.CompleteAsync();
+        return student;
+    }
+
     public async Task<Student> CreateStudentAsync(Student student)
     {
         if (student == null)

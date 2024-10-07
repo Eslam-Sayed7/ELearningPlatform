@@ -33,29 +33,10 @@ namespace Infrastructure.Services.Auth
             _unitOfWork = unitOfWork;
 
         }
-        
-        public async Task<loggedUserDto> GetCurrentUser()
-        {
-            var user = _httpContextAccessor.HttpContext?.User;
-        
-            if (user != null && user.Identity.IsAuthenticated)
-            {
-                var username = user.FindFirst(ClaimTypes.Name)?.Value;
-                var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                return new loggedUserDto
-                {
-                    Username = username,
-                    UserId  = Guid.Parse(userId),
-                    IsAuthenticated = true,
-                };
-            }
 
-            return new loggedUserDto
-            {
-                Message = "Unauthorized",
-                IsAuthenticated = false
-            };
-        }
+        
+        
+        
 
         public async Task<AuthModel> RegisterUserAsync(RegisterModel model)
         {
@@ -128,16 +109,19 @@ namespace Infrastructure.Services.Auth
                 return authModel;
             }
 
-            var jwtSecurityToken = await CreateJwtToken(user);
+            var storedSecurityToken = user.RefreshToken;
+            var RefreshTokenExpiryTime = user.RefreshTokenExpiryTime;
+
             var rolesList = await _userManager.GetRolesAsync(user);
+            
             if (authModel.User == null) {
                 authModel.User = new AppUser();
             }
             authModel.IsAuthenticated = true;
-            authModel.User.RefreshToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            authModel.User.RefreshToken = storedSecurityToken;
             authModel.Email = user.Email;
             authModel.Username = user.UserName;
-            authModel.User.RefreshTokenExpiryTime = jwtSecurityToken.ValidTo;
+            authModel.User.RefreshTokenExpiryTime = RefreshTokenExpiryTime;
             authModel.Roles = rolesList.ToList();
 
             return authModel;

@@ -12,6 +12,7 @@ using Infrastructure.Services.Auth;
 using Infrastructure.Data.Services;
 using Infrastructure.Data.IServices;
 using Infrastructure.Base;
+using Infrastructure.Services.Pay;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,9 +36,10 @@ builder.Services.AddIdentity<AppUser , IdentityRole>(options => options.SignIn.R
 
 builder.Services.AddScoped<IAuthService , AuthService>();
 builder.Services.AddTransient<IStudentService , StudentService>();
-builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -80,6 +82,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseDefaultFiles();
+
+// app.UseEndpoints(endpoints =>
+// {
+//     endpoints.MapControllers();
+// });
+
+
 
 app.UseAuthentication();  
 app.UseAuthorization();

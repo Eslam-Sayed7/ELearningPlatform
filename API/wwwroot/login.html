@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,7 +18,7 @@
             <form class="login-form">
                 <div class="input-group">
                     <label>Email</label>
-                    <input type="email" id="email" required>
+                    <input type="email" id = "email" required>
                 </div>
                 <div class="input-group">
                     <label>Password</label>
@@ -29,6 +29,7 @@
                         </span>
                     </div>
                 </div>
+                
                 <button type="submit" class="login-btn">Sign In</button>
                 <div class="divider">
                     <span>OR</span>
@@ -40,39 +41,44 @@
                 </div>
             </form>
             <div class="login-footer">
-                <p>Don't have an account? <a href="register.html">Register now</a></p>
+                <p>Don't have an account? <a href="register.html">Register</a></p>
             </div>
         </div>
     </div>
     <script src="scripts.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+     <script>
         document.querySelector('.login-form').addEventListener('submit', async function (event) {
             event.preventDefault();
 
-                const data = {
-                    Email: document.getElementById('email').value,
-                    Password: document.getElementById('password').value,
-                };
+            const loginModel = {
+                Email: document.getElementById('email').value,
+                Password: document.getElementById('password').value,
+            };
 
-                try {
-                    const response = await fetch('http://localhost:5028/api/auth/token', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(data),
-                    });
+            try {
+                const response = await fetch('http://localhost:5164/api/Auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginModel),
+                });
 
-                    if (response.ok) {
-                        alert('Form submitted successfully!');
+                const data = await response.json(); // Parse the response to JSON
+
+                if (response.ok) {
+                    if (data.refreshToken) {
+                        localStorage.setItem('refreshToken', data.refreshToken);
+                        alert('Login successfully!');
                     } else {
-                        alert('Error submitting form.');
+                        alert('Try login later');
                     }
-                } catch (error) {
-                    console.error('Error:', error);
+                } else {
+                    alert('Login failed');
                 }
-            });
+            } catch (error) {
+                console.error('Error:', error);
+            }
         });
 
     </script>

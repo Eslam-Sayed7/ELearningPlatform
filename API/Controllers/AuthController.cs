@@ -23,12 +23,14 @@ namespace TestApiJWT.Controllers
             _studentService = studentService;
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<loggedUserDto>> GetCurrentUser()
-        {
-            return await _authService.GetCurrentUser();
-        }
+        // do not need it for now [do not delete it please]
+        
+        // [Authorize]
+        // [HttpGet]
+        // public async Task<ActionResult<LoginResponseDto>> GetCurrentUser()
+        // {
+        //     return await _authService.GetCurrentUser();
+        // }
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model)
@@ -60,7 +62,17 @@ namespace TestApiJWT.Controllers
             if (!result.IsAuthenticated)
                 return Unauthorized(result.Message);
 
-            return Ok(result);
+            var res =  new LoginResponseDto {
+                Message = result.Message,
+                IsAuthenticated = result.IsAuthenticated,
+                Username = result.Username,
+                Email = result.Email,
+                Roles = result.Roles,
+                RefreshToken =  result.User.RefreshToken,
+                RefreshTokenExpiryTime = result.User.RefreshTokenExpiryTime
+            };
+            
+            return Ok(res);
         }
 
         [HttpPost("addrole")]

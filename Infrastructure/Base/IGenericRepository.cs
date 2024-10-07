@@ -8,7 +8,7 @@ namespace Infrastructure.Base;
 
 public interface IGenericRepository<T> where T : class
 {
-    Task<T> GetByIdAsync(int id);
+    Task<T> GetByIdAsync(Guid id);
     Task<IReadOnlyList<T>> ListAllAsync();
     Task<T> GetEntityWithSpec(ISpecification<T> spec);
     Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
@@ -34,4 +34,5 @@ public interface IGenericRepository<T> where T : class
     Task<IEnumerable<T>> FindBySpecificationAsync(
         ISpecification<T> specification);
 
+    public Task UpdateEntity(T entity);
 }
