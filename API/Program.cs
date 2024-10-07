@@ -38,6 +38,8 @@ builder.Services.AddTransient<IStudentService , StudentService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IPaymentService,PaymentService>();
+builder.Services.AddScoped<IEnrollmentService,EnrollmentServices>();
 
 builder.Services.AddAuthentication(options =>
 {
