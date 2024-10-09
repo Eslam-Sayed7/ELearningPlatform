@@ -12,7 +12,6 @@ using Infrastructure.Services.Auth;
 using Infrastructure.Data.Services;
 using Infrastructure.Data.IServices;
 using Infrastructure.Base;
-using Infrastructure.Services.Pay;
 
 var builder = WebApplication.CreateBuilder(args);
 

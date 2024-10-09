@@ -2,7 +2,7 @@ using Core.Entities;
 using Infrastructure.Data;
 using Infrastructure.Dtos;
 
-namespace Infrastructure.Services.Enrollservice;
+namespace Infrastructure.Data;
     public interface IEnrollmentService {
         Task<EnrollmentDto> EnrollInCourse(Guid studentId , Guid courseId );
 

@@ -2,6 +2,7 @@
 using Infrastructure.Dtos;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -14,6 +15,8 @@ namespace API.Controllers
             _service = service;
         }
 
+        //TODO
+        //[Authorize]
         [HttpPost("Payment")]
         public async Task<IActionResult> ProcessPayment([FromBody] PaymentRequestDto request)
         {

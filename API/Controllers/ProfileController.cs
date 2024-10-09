@@ -22,8 +22,8 @@ namespace TestApiJWT.Controllers
             _userService = userService;
         }
 
-        
-        // [Authorize]
+        //TODO
+        //[Authorize]
         [HttpPost("Details")]
         public async Task<IActionResult> GetProfileDetails([FromBody] ProfileDetailsModel model)
         {
@@ -41,7 +41,8 @@ namespace TestApiJWT.Controllers
             return Ok(profileresponse);
         }
         
-        // [Authorize]
+        //TODO
+        //[Authorize]
         [HttpPost("Update")]
         public async Task<IActionResult> UpdateUser([FromBody]  UpdateUserModel model)
         {
@@ -60,6 +61,8 @@ namespace TestApiJWT.Controllers
             return Ok(studentresponse);
         }
 
+        //TODO
+        //[Authorize]
         [HttpPost("Upload")]
         public async Task<IActionResult> UploadProfilePicture([FromForm] IFormFile file, [FromForm] Guid Id)
         {

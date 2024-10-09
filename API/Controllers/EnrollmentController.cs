@@ -4,7 +4,6 @@ using Infrastructure.Dtos;
 using Infrastructure.Services.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure.Services.Enrollservice;
 
 namespace CourseAPIFinale.Controllers
 {
@@ -30,8 +29,8 @@ namespace CourseAPIFinale.Controllers
             return Ok(enroll);
         }
 
-
-
+        //TODO
+        //[Authorize]
         [HttpGet()]
         public async Task<ActionResult<Enrollment>> GetEnrollment([FromBody] EnrollmentRequestDto request)
         {
