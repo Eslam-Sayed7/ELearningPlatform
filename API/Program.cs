@@ -12,7 +12,7 @@ using Infrastructure.Services.Auth;
 using Infrastructure.Data.Services;
 using Infrastructure.Data.IServices;
 using Infrastructure.Base;
-using Infrastructure.Services.Pay;
+//using Infrastructure.Services.Pay;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +39,7 @@ builder.Services.AddTransient<IStudentService , StudentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IPaymentService,PaymentService>();
-builder.Services.AddScoped<IEnrollmentService,EnrollmentServices>();
+//builder.Services.AddScoped<IEnrollmentService,EnrollmentServices>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IUserService, UserService>();
 

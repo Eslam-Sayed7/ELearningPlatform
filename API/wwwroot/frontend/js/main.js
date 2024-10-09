@@ -275,7 +275,7 @@ window.addEventListener('scroll', function() {
   // all.js
 
 function injectHeadContent() {
-    fetch('../combonents/head.html')
+    fetch('/ELearningPlatform/API/wwwroot/frontend/combonents/head.html')
         .then(response => response.text())
         .then(data => {
             const parser = new DOMParser();
@@ -294,7 +294,7 @@ function injectHeadContent() {
 document.addEventListener('DOMContentLoaded', injectHeadContent);
 
 function injectNavbar() {
-    fetch('../combonents/navbar/navbar.html')
+    fetch("/ELearningPlatform/API/wwwroot/frontend/combonents/navbar/navbar.html")
         .then(response => response.text())
         .then(data => {
             const parser = new DOMParser();
