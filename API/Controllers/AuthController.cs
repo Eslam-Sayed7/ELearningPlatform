@@ -75,6 +75,8 @@ namespace TestApiJWT.Controllers
             return Ok(res);
         }
 
+        //TODO
+        //[Authorize]
         [HttpPost("addrole")]
         public async Task<IActionResult> AddRoleAsync([FromBody] AddRoleModel model)
         {

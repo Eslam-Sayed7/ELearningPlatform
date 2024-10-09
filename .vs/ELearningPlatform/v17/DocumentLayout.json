@@ -1,0 +1,193 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\ah967\\source\\repos\\Educu\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|c:\\users\\ah967\\source\\repos\\educu\\api\\controllers\\searchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|solutionrelative:api\\controllers\\searchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|c:\\users\\ah967\\source\\repos\\educu\\api\\controllers\\enrollmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|solutionrelative:api\\controllers\\enrollmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B30A2242-7462-485F-A5DE-E8F6F6825640}|Core\\Core.csproj|c:\\users\\ah967\\source\\repos\\educu\\core\\entities\\course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B30A2242-7462-485F-A5DE-E8F6F6825640}|Core\\Core.csproj|solutionrelative:core\\entities\\course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|c:\\users\\ah967\\source\\repos\\educu\\api\\wwwroot\\register.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|solutionrelative:api\\wwwroot\\register.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|c:\\users\\ah967\\source\\repos\\educu\\api\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|solutionrelative:api\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|c:\\users\\ah967\\source\\repos\\educu\\api\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|solutionrelative:api\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|c:\\users\\ah967\\source\\repos\\educu\\api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|solutionrelative:api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|c:\\users\\ah967\\source\\repos\\educu\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{77A37AFC-7A3A-4402-8017-FBA9F961D815}|API\\API.csproj|solutionrelative:api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EDA4320A-F94E-4C33-970D-92503E990584}|Infrastructure\\Infrastructure.csproj|c:\\users\\ah967\\source\\repos\\educu\\infrastructure\\data\\iservices\\ienrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EDA4320A-F94E-4C33-970D-92503E990584}|Infrastructure\\Infrastructure.csproj|solutionrelative:infrastructure\\data\\iservices\\ienrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EDA4320A-F94E-4C33-970D-92503E990584}|Infrastructure\\Infrastructure.csproj|c:\\users\\ah967\\source\\repos\\educu\\infrastructure\\data\\services\\enrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EDA4320A-F94E-4C33-970D-92503E990584}|Infrastructure\\Infrastructure.csproj|solutionrelative:infrastructure\\data\\services\\enrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Course.cs",
+              "DocumentMoniker": "C:\\Users\\ah967\\source\\repos\\Educu\\Core\\Entities\\Course.cs",
+              "RelativeDocumentMoniker": "Core\\Entities\\Course.cs",
+              "ToolTip": "C:\\Users\\ah967\\source\\repos\\Educu\\Core\\Entities\\Course.cs",
+              "RelativeToolTip": "Core\\Entities\\Course.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-09T00:03:25.571Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SearchController.cs",
+              "DocumentMoniker": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Controllers\\SearchController.cs",
+              "RelativeDocumentMoniker": "API\\Controllers\\SearchController.cs",
+              "ToolTip": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Controllers\\SearchController.cs",
+              "RelativeToolTip": "API\\Controllers\\SearchController.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAwwEYAAABjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-09T00:02:19.392Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "register.html",
+              "DocumentMoniker": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\wwwroot\\register.html",
+              "RelativeDocumentMoniker": "API\\wwwroot\\register.html",
+              "ToolTip": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\wwwroot\\register.html",
+              "RelativeToolTip": "API\\wwwroot\\register.html",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAAE8AAABNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2024-10-08T22:27:32.063Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ProfileController.cs",
+              "DocumentMoniker": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Controllers\\ProfileController.cs",
+              "RelativeDocumentMoniker": "API\\Controllers\\ProfileController.cs",
+              "ToolTip": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Controllers\\ProfileController.cs",
+              "RelativeToolTip": "API\\Controllers\\ProfileController.cs",
+              "ViewState": "AgIAADMAAAAAAAAAAAAQwFgAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-08T20:00:46.633Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PaymentController.cs",
+              "DocumentMoniker": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Controllers\\PaymentController.cs",
+              "RelativeDocumentMoniker": "API\\Controllers\\PaymentController.cs",
+              "ToolTip": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Controllers\\PaymentController.cs",
+              "RelativeToolTip": "API\\Controllers\\PaymentController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-08T19:59:14.656Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "API\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "API\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAAAE0AAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-08T19:58:40.43Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EnrollmentController.cs",
+              "DocumentMoniker": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Controllers\\EnrollmentController.cs",
+              "RelativeDocumentMoniker": "API\\Controllers\\EnrollmentController.cs",
+              "ToolTip": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Controllers\\EnrollmentController.cs",
+              "RelativeToolTip": "API\\Controllers\\EnrollmentController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAkwCgAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-08T16:52:51.898Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "IEnrollmentService.cs",
+              "DocumentMoniker": "C:\\Users\\ah967\\source\\repos\\Educu\\Infrastructure\\Data\\IServices\\IEnrollmentService.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Data\\IServices\\IEnrollmentService.cs",
+              "ToolTip": "C:\\Users\\ah967\\source\\repos\\Educu\\Infrastructure\\Data\\IServices\\IEnrollmentService.cs",
+              "RelativeToolTip": "Infrastructure\\Data\\IServices\\IEnrollmentService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-08T16:48:14.945Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Program.cs",
+              "RelativeDocumentMoniker": "API\\Program.cs",
+              "ToolTip": "C:\\Users\\ah967\\source\\repos\\Educu\\API\\Program.cs",
+              "RelativeToolTip": "API\\Program.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAAE0AAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-08T16:46:40.474Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "EnrollmentService.cs",
+              "DocumentMoniker": "C:\\Users\\ah967\\source\\repos\\Educu\\Infrastructure\\Data\\Services\\EnrollmentService.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Data\\Services\\EnrollmentService.cs",
+              "ToolTip": "C:\\Users\\ah967\\source\\repos\\Educu\\Infrastructure\\Data\\Services\\EnrollmentService.cs",
+              "RelativeToolTip": "Infrastructure\\Data\\Services\\EnrollmentService.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAACsAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-08T16:46:13.657Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

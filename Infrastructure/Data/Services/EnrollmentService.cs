@@ -1,11 +1,10 @@
 using Infrastructure.Data;
 using Core.Entities;
 using Infrastructure.Base;
-using Infrastructure.Services.Pay;
 using Core.Enums;
 using Infrastructure.Dtos;
 
-namespace Infrastructure.Services.Enrollservice
+namespace Infrastructure.Data
 {
     public class EnrollmentServices : IEnrollmentService 
     {  
