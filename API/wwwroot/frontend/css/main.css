@@ -3137,15 +3137,15 @@ h6 {
   align-items: center;
   width: 10%;
   display: flex;
-  color: var(--primary-style-color);
+  color: #43005f;
   margin-left: 40px;
   font-size: 25px;
 }
 
 .logo h1{
-  color: white;
   font-size: 15px;
   font-family: "Montserrat";
+  color:var(--primary-text-color-dark);
 }
 
 .search-bar {
@@ -3184,7 +3184,7 @@ h6 {
 .navbar  #browse-b {
 text-decoration: none;
 font-weight: 500;
-color: #ffffff;
+color: #000000;
 margin: 10px;
 font-size: 12px;
 }
@@ -3203,7 +3203,7 @@ font-size: 12px;
 
 .navbar .icons i,
 .navbar .icons img {
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 
@@ -3275,22 +3275,4 @@ font-size: 12px;
 .navbar.scrolled {
   z-index: 99999999; /* Ensure it stays above other elements */
   background-color: var(--primary-background); /* Solid background when scrolled */ 
-  
 }
-
-.navbar.scrolled  #browse-b {
-  text-decoration: none;
-  font-weight: 500;
-  color: #000000;
-  margin: 10px;
-  font-size: 12px;
-  }
-
-.navbar.scrolled .icons i,
-.navbar.scrolled .icons img {
-  color: black;
-}
-
-.navbar.scrolled .logo h1 {
-  color: black;
-  }
