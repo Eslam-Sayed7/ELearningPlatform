@@ -13,6 +13,7 @@ namespace API.Controllers
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
+
         public CourseController(ICourseService courseService)
         {
             _courseService = courseService;
@@ -29,7 +30,7 @@ namespace API.Controllers
             // }
             var courseDto = new Course
             {
-                
+
                 CourseName = course.CourseName,
                 Description = course.Description,
                 Level = course.Level,
@@ -39,27 +40,28 @@ namespace API.Controllers
                 Language = course.Language,
                 UpdatedAt = course.UpdatedAt
             };
-                return Ok(courseDto);
+            return Ok(courseDto);
         }
 
         [HttpGet("Popular")]
         public async Task<ActionResult<IEnumerable<CourseCardDto>>> GetCoursesPagse()
         {
             var courses = await _courseService.GetPopularCoursesPaged();
-            
+
             return Ok(courses);
         }
 
         [HttpPost("CoursesByCategory")]
-        public async Task<ActionResult<IList<CourseCardDto>>> GetCoursesByCategory([FromBody] FilterByCategoryRequest request)
+        public async Task<ActionResult<IList<CourseCardDto>>> GetCoursesByCategory(
+            [FromBody] FilterByCategoryRequest request)
         {
             var spec = new Specification<Course>(c => c.Category.CategoryName == request.categoryName)
                 .AddInclude(c => c.Include(x => x.Instructors))
                 .AddInclude(c => c.Include(cat => cat.Category))
                 .ApplyOrderBy(q => q.OrderByDescending(c => c.CreatedAt));
-            
+
             var courses = await _courseService.GetCoursesByCategory(spec);
-            IList <CourseCardDto> result = new List<CourseCardDto>();
+            IList<CourseCardDto> result = new List<CourseCardDto>();
 
             foreach (var c in courses)
             {
@@ -73,30 +75,38 @@ namespace API.Controllers
                 };
                 result.Add(crs);
             }
-            return ((result.Any()) ? Ok(result) : Ok()); 
+
+            return ((result.Any()) ? Ok(result) : Ok());
         }
+
+
         // Delete a course
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCourse(Guid id)
         {
-            var course = await _context.Courses.FindAsync(id);
+            var course = await _courseService.GetCourseByIdAsync(id);
 
             if (course == null)
             {
                 return NotFound();
             }
 
-            _context.Courses.Remove(course);
-            await _context.SaveChangesAsync();
+            // TODO delete funct want to be implemented first inside te unitofworkclass
+            // _context.Courses.Remove(course);
+            // await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
         // Helper method to check if a course exists
-        private bool CourseExists(Guid id)
+        private async Task<bool> CourseExists(Guid id)
         {
-            return _context.Courses.Any(c => c.CourseId == id);
+            var course = await _courseService.GetCourseByIdAsync(id);
+            if (course is not null)
+                return true;
+            return false;
         }
+
 
         [HttpPost("Upload")]
         public async Task<IActionResult> Upload(IFormFile file)
@@ -112,39 +122,35 @@ namespace API.Controllers
             return Ok(new { url = fileUrl });
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<Course>> AddCourse([FromBody] Course courseDto)
-        //{
-        //    if (courseDto == null)
-        //    {
-        //        return BadRequest("Course data is required.");
-        //    }
+        // [HttpPost]
+        // public async Task<ActionResult<Course>> AddCourse([FromBody] Course courseDto)
+        // {
+        //     if (courseDto == null)
+        //     {
+        //         return BadRequest("Course data is required.");
+        //     }
+        //
+        //     var course = new Course
+        //     {
+        //         CourseName = courseDto.CourseName,
+        //         Description = courseDto.Description,
+        //         Level = courseDto.Level,
+        //         Price = courseDto.Price,
+        //         Duration = courseDto.Duration,
+        //         ThumbnailUrl = courseDto.ThumbnailUrl,
+        //         Language = courseDto.Language,
+        //         Tags = courseDto.Tags,
+        //         Category = courseDto.Category,
+        //         CreatedAt = DateTime.UtcNow,
+        //         UpdatedAt = DateTime.UtcNow
+        //     };
+        //
+        //     _context.Courses.Add(course);
+        //     await _context.SaveChangesAsync();
+        //
+        //     return CreatedAtAction(nameof(GetCourseById), new { id = course.Id }, course); // Return the new course with its ID
+        // }
 
-        //    var course = new Course
-        //    {
-        //        CourseName = courseDto.CourseName,
-        //        Description = courseDto.Description,
-        //        Level = courseDto.Level,
-        //        Price = courseDto.Price,
-        //        Duration = courseDto.Duration,
-        //        ThumbnailUrl = courseDto.ThumbnailUrl,
-        //        Language = courseDto.Language,
-        //        Tags = courseDto.Tags,
-        //        Category = courseDto.Category,
-        //        CreatedAt = DateTime.UtcNow,
-        //        UpdatedAt = DateTime.UtcNow
-        //    };
-
-        //    _context.Courses.Add(course);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction(nameof(GetCourseById), new { id = course.Id }, course); // Return the new course with its ID
-        //}
-
-
-    }
-
-        
         //
         // [HttpPost("AddCourse")]
         // public async Task<ActionResult<Course>> AddCourse([FromBody] AddCourseModel request)
@@ -154,6 +160,6 @@ namespace API.Controllers
         //     var course = await _courseService.AddCourse(request);
         //     return Ok(course);
         // }
-        
+
     }
 }
