@@ -1,12 +1,13 @@
 ﻿using Core.Entities;
 using Infrastructure.Data;
+using Infrastructure.Data.Models;
 using Infrastructure.Dtos;
 using Infrastructure.Services.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Services.Enrollservice;
 
-namespace CourseAPIFinale.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -30,10 +31,8 @@ namespace CourseAPIFinale.Controllers
             return Ok(enroll);
         }
 
-
-
-        [HttpGet()]
-        public async Task<ActionResult<Enrollment>> GetEnrollment([FromBody] EnrollmentRequestDto request)
+        [HttpPost("CheckEnroll")]
+        public async Task<ActionResult<Enrollment>> GetEnrollment([FromBody] CheckEnrollmentModel request)
         {
             var enrollment = await _enrollService.CheckEnrollmentStatusAsync(request.UserId , request.CourseId);
             if (enrollment == false)
@@ -42,5 +41,9 @@ namespace CourseAPIFinale.Controllers
             }
             return Ok(enrollment);
         }
+        
+        
+        
+        
     }
 }

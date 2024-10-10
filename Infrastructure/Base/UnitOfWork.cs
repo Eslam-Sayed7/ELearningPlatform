@@ -27,11 +27,10 @@ public class UnitOfWork : IUnitOfWork , IDisposable
     
     }
 
-    public async Task<int> CompleteAync()
+    public async Task<int> CompleteAsync()
     {
         return await _context.SaveChangesAsync();
     }
-
     public async Task BeginTransactionAsync()
     {
         if (_transaction != null)
@@ -84,37 +83,32 @@ public class UnitOfWork : IUnitOfWork , IDisposable
         }
     }
 
-    public async Task<int> CompleteAsync()
+    protected virtual void Dispose(bool disposing)
     {
-        return await _context.SaveChangesAsync();
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                foreach (var repository in _repositories.Values)
+                {
+                    if (repository is IDisposable disposableRepository)
+                    {
+                        disposableRepository.Dispose();
+                    }
+                }
+        
+                _context.Dispose();
+                _transaction?.Dispose();
+            }
+        
+            _disposed = true;
+        }
     }
-    // protected virtual void Dispose(bool disposing)
-    // {
-    //     if (!_disposed)
-    //     {
-    //         if (disposing)
-    //         {
-    //             foreach (var repository in _repositories.Values)
-    //             {
-    //                 if (repository is IDisposable disposableRepository)
-    //                 {
-    //                     disposableRepository.Dispose();
-    //                 }
-    //             }
-    //
-    //             _context.Dispose();
-    //             _transaction?.Dispose();
-    //         }
-    //
-    //         _disposed = true;
-    //     }
-    // }
 
     public void Dispose()
     {
-        // Dispose(true);
-        // GC.SuppressFinalize(this);
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
-   
 }

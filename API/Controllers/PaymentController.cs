@@ -1,6 +1,5 @@
-﻿using Core.Entities;
-using Infrastructure.Dtos;
-using Infrastructure.Data;
+﻿using Infrastructure.Dtos;
+using Infrastructure.Data.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers

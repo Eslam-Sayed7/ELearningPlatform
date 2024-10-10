@@ -2,7 +2,7 @@
 
 public partial class Course
 {
-    public Guid CourseId { get; set; }
+    public Guid CourseId { get; set; } = Guid.NewGuid();
     public string CourseName { get; set; } = null!;
     public string? Description { get; set; }
     public Guid? CategoryId { get; set; }
@@ -13,6 +13,7 @@ public partial class Course
     public string Language { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public int LastSectionSequence { get; set; }   // used to sort descending sections
     public virtual Category Category { get; set; }
     public virtual ICollection<CourseSection> CourseSections { get; set; } = new List<CourseSection>();
     public virtual ICollection<CourseMaterial> CourseMaterials { get; set; } = new List<CourseMaterial>();

@@ -1,7 +1,7 @@
 using Core.Entities;
 using Infrastructure.Data.Models;
 
-namespace Infrastructure.Data.IServices;
+    namespace Infrastructure.Data.IServices;
 
 public interface IUserService
 {

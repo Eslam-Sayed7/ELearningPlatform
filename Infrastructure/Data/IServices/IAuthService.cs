@@ -1,5 +1,6 @@
 using Core.Entities;
 using Infrastructure.Data;
+using Infrastructure.Data.Models;
 using Infrastructure.Dtos;
 
 
@@ -11,5 +12,6 @@ namespace Infrastructure.Services.Auth;
 
         Task<string> AddRoleAsync(AddRoleModel model);
 
-        
+        Task<UserRoleDto> GetRoleAsync(GetRoleModel model);
+
     }

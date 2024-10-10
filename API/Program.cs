@@ -9,10 +9,12 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Core.Entities;
 using Infrastructure.Services.Auth;
-using Infrastructure.Data.Services;
 using Infrastructure.Data.IServices;
+using Infrastructure.Data.Services;
+using Infrastructure.Services.Enrollservice;
 using Infrastructure.Base;
-using Infrastructure.Services.Pay;
+
+// using Infrastructure.Services.Pay;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +44,7 @@ builder.Services.AddScoped<IPaymentService,PaymentService>();
 builder.Services.AddScoped<IEnrollmentService,EnrollmentServices>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -63,10 +66,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// builder.Services.AddAuthorization(options =>
-// {
-//     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-// });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+});
 
 // builder.Services.AddIdentityServices();
 builder.Services.AddControllers();

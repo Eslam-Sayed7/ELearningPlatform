@@ -6,18 +6,20 @@ public class CourseSectionConfiguration : IEntityTypeConfiguration<CourseSection
 {
     public void Configure(EntityTypeBuilder<CourseSection> builder)
     {        
-        builder.HasKey(e => e.ContentId);
+        builder.HasKey(e => e.SectionId);
 
-        builder.ToTable("Course_Content");
 
-        builder.Property(e => e.ContentId).HasColumnName("ContentID");
+        builder.Property(e => e.SectionId).HasColumnName("SectionId");
         builder.Property(e => e.CourseId).HasColumnName("CourseID");
-        builder.Property(e => e.CreatedAt)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP")
-            .HasColumnType("DATETIME");
-        builder.Property(e => e.Title).HasColumnType("VARCHAR(255)");
-
-        builder.HasOne(d => d.Course).WithMany(p => p.CourseSections).HasForeignKey(d => d.CourseId);
-
+        builder.Property(e => e.Title).HasColumnType("NVARCHAR(255)");
+        builder.Property(e => e.SectionSequence).HasColumnType("INT").HasDefaultValue(0);
+        builder.Property(e => e.LastMaterialSequence).HasColumnType("INT").HasDefaultValue(0);
+        
+        builder.HasOne(d => d.Course)
+            .WithMany(p => p.CourseSections)
+            .HasForeignKey(d => d.CourseId)
+            .IsRequired();
+        
+        builder.ToTable("CoursesSections");
     }
 }

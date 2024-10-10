@@ -10,10 +10,11 @@ public class EnrollmentsConfiguration : IEntityTypeConfiguration<Enrollment>
         
         builder.Property(e => e.CourseId).IsRequired();
         builder.Property(e => e.EnrollmentDate);
-        builder.Property(e => e.Progress).IsRequired(false); 
+        builder.Property(e => e.ProgressPercentage).IsRequired(false).HasDefaultValue(0.0); 
         builder.Property(e => e.StudentId).IsRequired();
         builder.Property(e => e.PaymentId).IsRequired();
-
+        
+       
       builder.HasKey(e => e.EnrollmentId);
 
         // Relationships

@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Infrastructure.Dtos;
 using Infrastructure.Data.IServices;
 using Infrastructure.Base;
+using Infrastructure.Data.Models;
 
 namespace Infrastructure.Services.Auth
 {   
@@ -174,6 +175,18 @@ namespace Infrastructure.Services.Auth
             return jwtSecurityToken;
         }
 
+        public async Task<UserRoleDto> GetRoleAsync(GetRoleModel model)
+        {
+            
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return new UserRoleDto()
+            {
+                Roles = roles
+            };
+        }
+        
     }
 
 }

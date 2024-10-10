@@ -7,7 +7,9 @@ using Infrastructure.Dtos;
 using Infrastructure.Data.Services;
 using Infrastructure.Data.IServices;
 using Core.Entities;
-namespace TestApiJWT.Controllers
+using Infrastructure.Data.Models;
+
+namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,10 +29,11 @@ namespace TestApiJWT.Controllers
         
         // [Authorize]
         // [HttpGet]
-        // public async Task<ActionResult<LoginResponseDto>> GetCurrentUser()
+        // public async Task<ActionResult<LoginResponseDto>> GetCurrentUserRole()
         // {
         //     return await _authService.GetCurrentUser();
         // }
+        
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model)
@@ -75,7 +78,7 @@ namespace TestApiJWT.Controllers
             return Ok(res);
         }
 
-        [HttpPost("addrole")]
+        [HttpPost("AddRole")]
         public async Task<IActionResult> AddRoleAsync([FromBody] AddRoleModel model)
         {
             if (!ModelState.IsValid)
@@ -88,5 +91,15 @@ namespace TestApiJWT.Controllers
 
             return Ok(model);
         }
+            
+        
+        // [Authorize]
+        [HttpPost("GetRole")]
+        public async Task<ActionResult<UserRoleDto>> GetRoleAsync([FromBody] GetRoleModel model)
+        {
+            var result = await _authService.GetRoleAsync(model);
+            return Ok(result);
+        }
+        
      }
 }

@@ -2,7 +2,7 @@
 
 public partial class InstructorsToCourse
 {
-    public Guid InstructorToCourseId { get; set; }
+    public Guid InstructorToCourseId { get; set; } = Guid.NewGuid();
 
     public Guid InstructorId { get; set; }
 

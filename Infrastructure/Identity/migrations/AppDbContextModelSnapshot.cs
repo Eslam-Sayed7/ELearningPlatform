@@ -160,6 +160,9 @@ namespace Infrastructure.Identity.migrations
                         .IsRequired()
                         .HasColumnType("VARCHAR(100)");
 
+                    b.Property<int>("LastSectionSequence")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Level")
                         .IsRequired()
                         .HasColumnType("VARCHAR(50)");
@@ -188,59 +191,71 @@ namespace Infrastructure.Identity.migrations
 
             modelBuilder.Entity("Core.Entities.CourseMaterial", b =>
                 {
-                    b.Property<int>("MaterialId")
+                    b.Property<Guid>("MaterialId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("TEXT")
                         .HasColumnName("MaterialID");
 
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("CourseID");
+                    b.Property<Guid?>("CourseId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(255)");
-
-                    b.Property<int>("Sequence")
+                    b.Property<int>("MaterialSequence")
                         .HasColumnType("INTEGER");
+
+                    b.Property<int>("MaterialType")
+                        .HasColumnType("INT");
+
+                    b.Property<Guid>("SectionId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("SectionID");
+
+                    b.Property<string>("TextContent")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(255)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Url");
 
                     b.HasKey("MaterialId");
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Course_Materials", (string)null);
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("CourseMaterials", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.CourseSection", b =>
                 {
-                    b.Property<Guid>("ContentId")
+                    b.Property<Guid>("SectionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasColumnName("ContentID");
+                        .HasColumnName("SectionId");
 
                     b.Property<Guid>("CourseId")
                         .HasColumnType("TEXT")
                         .HasColumnName("CourseID");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<int>("LastMaterialSequence")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("DATETIME")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("INT")
+                        .HasDefaultValue(0);
 
-                    b.Property<int>("Sequence")
-                        .HasColumnType("INTEGER");
+                    b.Property<int>("SectionSequence")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Title")
-                        .HasColumnType("VARCHAR(255)");
+                        .HasColumnType("NVARCHAR(255)");
 
-                    b.Property<int>("level")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ContentId");
+                    b.HasKey("SectionId");
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Course_Content", (string)null);
+                    b.ToTable("CoursesSections", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Enrollment", b =>
@@ -258,8 +273,10 @@ namespace Infrastructure.Identity.migrations
                     b.Property<Guid>("PaymentId")
                         .HasColumnType("TEXT");
 
-                    b.Property<double?>("Progress")
-                        .HasColumnType("REAL");
+                    b.Property<double?>("ProgressPercentage")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("REAL")
+                        .HasDefaultValue(0.0);
 
                     b.Property<Guid>("StudentId")
                         .HasColumnType("TEXT");
@@ -343,8 +360,7 @@ namespace Infrastructure.Identity.migrations
                     b.Property<Guid>("StudentId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("TransactionDate")
-                        .IsRequired()
+                    b.Property<DateTime>("TransactionDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("paymentStatus")
@@ -354,6 +370,33 @@ namespace Infrastructure.Identity.migrations
                     b.HasKey("PaymentId");
 
                     b.ToTable("Payment");
+                });
+
+            modelBuilder.Entity("Core.Entities.Progress", b =>
+                {
+                    b.Property<int>("ProgressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("EnrollmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCompleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("MaterialId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ProgressId");
+
+                    b.HasIndex("EnrollmentId")
+                        .IsUnique();
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("Progresses", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Student", b =>
@@ -372,61 +415,6 @@ namespace Infrastructure.Identity.migrations
                         .IsUnique();
 
                     b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("Core.Entities.TextContent", b =>
-                {
-                    b.Property<Guid>("TextId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("TextID");
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("Body");
-
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("ContentID");
-
-                    b.Property<int>("Sequence")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("TextId");
-
-                    b.HasIndex("SectionId");
-
-                    b.ToTable("TextContents", (string)null);
-                });
-
-            modelBuilder.Entity("Core.Entities.VideoContent", b =>
-                {
-                    b.Property<int>("VideoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("VideoID");
-
-                    b.Property<double>("Duration")
-                        .HasColumnType("REAL");
-
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("ContentID");
-
-                    b.Property<int>("Sequence")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("VideoUrl")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(255)")
-                        .HasColumnName("VideoURL");
-
-                    b.HasKey("VideoId");
-
-                    b.HasIndex("SectionId");
-
-                    b.ToTable("Video_Contents", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -457,19 +445,19 @@ namespace Infrastructure.Identity.migrations
                     b.HasData(
                         new
                         {
-                            Id = "d74fc404-e8ea-4161-8bbd-8546be8e05f9",
+                            Id = "4c7ae234-a320-416f-b983-0a295ce5f2a4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "9495bdab-8689-4b2f-b820-9c94af44279c",
+                            Id = "cf135e10-4bbc-4a65-88bc-9f3705659d3e",
                             Name = "Instructor",
                             NormalizedName = "Instructor"
                         },
                         new
                         {
-                            Id = "f8f8bc68-ba4e-421a-be1a-f12f9f03353f",
+                            Id = "1a2a5fa4-37bd-440a-b592-f0bb8aeb4f72",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
@@ -598,13 +586,17 @@ namespace Infrastructure.Identity.migrations
 
             modelBuilder.Entity("Core.Entities.CourseMaterial", b =>
                 {
-                    b.HasOne("Core.Entities.Course", "Course")
+                    b.HasOne("Core.Entities.Course", null)
                         .WithMany("CourseMaterials")
-                        .HasForeignKey("CourseId")
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("Core.Entities.CourseSection", "Section")
+                        .WithMany("CourseMaterials")
+                        .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("Core.Entities.CourseSection", b =>
@@ -671,6 +663,25 @@ namespace Infrastructure.Identity.migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Core.Entities.Progress", b =>
+                {
+                    b.HasOne("Core.Entities.Enrollment", "Enrollment")
+                        .WithOne("Progress")
+                        .HasForeignKey("Core.Entities.Progress", "EnrollmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.CourseMaterial", "Material")
+                        .WithMany()
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Enrollment");
+
+                    b.Navigation("Material");
+                });
+
             modelBuilder.Entity("Core.Entities.Student", b =>
                 {
                     b.HasOne("Core.Entities.AppUser", "Appuser")
@@ -680,28 +691,6 @@ namespace Infrastructure.Identity.migrations
                         .IsRequired();
 
                     b.Navigation("Appuser");
-                });
-
-            modelBuilder.Entity("Core.Entities.TextContent", b =>
-                {
-                    b.HasOne("Core.Entities.CourseSection", "Section")
-                        .WithMany("TextContents")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Section");
-                });
-
-            modelBuilder.Entity("Core.Entities.VideoContent", b =>
-                {
-                    b.HasOne("Core.Entities.CourseSection", "Section")
-                        .WithMany("VideoContents")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -775,9 +764,13 @@ namespace Infrastructure.Identity.migrations
 
             modelBuilder.Entity("Core.Entities.CourseSection", b =>
                 {
-                    b.Navigation("TextContents");
+                    b.Navigation("CourseMaterials");
+                });
 
-                    b.Navigation("VideoContents");
+            modelBuilder.Entity("Core.Entities.Enrollment", b =>
+                {
+                    b.Navigation("Progress")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Core.Entities.Instructor", b =>

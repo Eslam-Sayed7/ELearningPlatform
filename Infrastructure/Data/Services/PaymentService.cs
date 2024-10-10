@@ -1,9 +1,9 @@
-using System.Diagnostics;
-using Core.Entities;
 using Core.Enums;
 using Infrastructure.Base;
+using Infrastructure.Data.IServices;
+using Core.Entities;
 
-namespace Infrastructure.Data;
+namespace Infrastructure.Data.Services;
 
 public class PaymentService : IPaymentService
 {
@@ -12,11 +12,6 @@ public class PaymentService : IPaymentService
 
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
-
-    // public asnyc Task<string> GenerateInvoiceAsync(Guid paymentId)
-    // {
-        
-    // }
 
     public Task<Payment> GetPaymentByIdAsync(Guid paymentId)
     {

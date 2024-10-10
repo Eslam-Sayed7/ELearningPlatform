@@ -5,6 +5,7 @@ using Core.Entities.Configuration;
 using Infrastructure.Config;
 using Infrastructure.Configs;
 using Microsoft.AspNetCore.Identity;
+using ProgressConfiguration = Core.Entities.Configuration.ProgressConfiguration;
 
 namespace Infrastructure.Data;
 
@@ -22,11 +23,12 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
     public virtual DbSet<Course> Courses { get; set; }
     public virtual DbSet<Student> Students { get; set; }
     public virtual DbSet<Instructor> Instructors { get; set; }
-    public virtual DbSet<CourseSection> CourseContents { get; set; }
+    public virtual DbSet<CourseSection> CourseSections { get; set; }
     public virtual DbSet<CourseMaterial> CourseMaterials { get; set; }
-    public virtual DbSet<TextContent> TextContents { get; set; }
     public virtual DbSet<Enrollment> Enrollments { get; set; }
-    public virtual DbSet<VideoContent> VideoContents { get; set; }
+    public virtual DbSet<Progress> Progresses { get; set; }
+    // public virtual DbSet<TextContent> TextContents { get; set; }
+    // public virtual DbSet<VideoContent> VideoContents { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlite("Data Source=../ELearningPlatform.db");
@@ -46,8 +48,10 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
         modelBuilder.ApplyConfiguration(new CourseMaterialConfiguration());
         modelBuilder.ApplyConfiguration(new PaymensConfiguration());
         modelBuilder.ApplyConfiguration(new EnrollmentsConfiguration());
-        modelBuilder.ApplyConfiguration(new TextContentConfiguration());
-        modelBuilder.ApplyConfiguration(new VideoContentConfiguration());
+        modelBuilder.ApplyConfiguration(new ProgressConfiguration());
+        
+        // modelBuilder.ApplyConfiguration(new TextContentConfiguration());
+        // modelBuilder.ApplyConfiguration(new VideoContentConfiguration());
 
          // Seed Roles
          modelBuilder.Entity<IdentityRole>().HasData(

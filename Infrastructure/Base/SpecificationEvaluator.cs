@@ -5,9 +5,9 @@ namespace Infrastructure.Base;
 
 public class SpecificationEvaluator<TEntity> where TEntity : class
 {
-    public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
+    public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> QueryInput, ISpecification<TEntity> spec)
     {
-        var query = inputQuery;
+        var query = QueryInput;
 
         // Apply filtering based on the Criteria
         if (spec.Criteria != null)
