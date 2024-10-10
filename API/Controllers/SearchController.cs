@@ -37,8 +37,8 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<Course>>> SearchCoursesWithFiltering(
         [FromQuery] string query,
         [FromQuery] string? level,
-        [FromQuery] decimal? minPrice,
-        [FromQuery] decimal? maxPrice,
+        [FromQuery] double? minPrice,
+        [FromQuery] double? maxPrice,
         [FromQuery] string language)
         {
 
