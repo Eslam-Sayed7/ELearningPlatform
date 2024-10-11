@@ -390,13 +390,13 @@
 
         async function FetchCourseDetails(id) {
             try {
-                    const response = await fetch(`http://localhost:5164/api/Course/${id}`, {
+                    const response = await fetch(`http://localhost:5164/api/Course/Get/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 });
-                const data = await response.json(); // Parse the response to JSON
+                const data = await response.json();
 
                 if (response.ok) {
                     return data;
@@ -408,34 +408,33 @@
             }
         }
 
-        function loadCourseDetails(data) {
-            document.querySelectorAll('.single-popular-course').forEach((course, courseIndex) => {
-                data.forEach((FetchedCourse, index) => {
-                    if (index === courseIndex) {
-                        let img = course.querySelector('.thumb > img');
+            function loadCourseDetails(data) {
 
-                        if (img) {
-                            img.src = `${FetchedCourse.thumbnailUrl}`;
-                        }
-                        let category = course.querySelector('.details .name');
-                        if (category) {
-                            category.textContent = `${FetchedCourse.category}`;
-                        }
-                        let value = course.querySelector('.details .value');
-                        if (value) {
-                            value.textContent = `${FetchedCourse.price}`;
-                        }
-                        let name = course.querySelector('.details .courseUrl > h4');
-                        if(name){
-                            name.textContent = `${FetchedCourse.courseName}`;
-                        }
-                    }
-                });
-            });
+                let trainer = querySelector('body > section.course-details-area.section-gap > div > div > div.col-lg-4.right-contents > ul > li:nth-child(1) > a > span');
+                if (trainer) {
+                    trainer.or.textContent = `${data.Instructor}`;
+                }
+                let category = querySelector('body > section.course-details-area.section-gap > div > div > div.col-lg-4.right-contents > ul > li:nth-child(3) > a > span');
+                if (category) {
+                    category.textContent = `${FetchedCourse.categoryName}`;
+                }
+                let Duration = course.querySelector('body > section.course-details-area.section-gap > div > div > div.col-lg-4.right-contents > ul > li:nth-child(2) > a > span');
+                if (Duration) {
+                    value.textContent = `${FetchedCourse.duration}`;
+                }
+                // let name = querySelector('.details .courseUrl > h4');
+                // if(name){
+                //     name.textContent = `${FetchedCourse.courseName}`;
+                // }
+                let Description = querySelector('body > section.course-details-area.section-gap > div > div > div.col-lg-8.course-details-left > div.content-wrapper > div:nth-child(2)');
+                if(name){
+                    name.textContent = `${data.description}`;
+                }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            FetchCourseDetails().then(courseDetails => {
+            let id = "a9c5c1b1-754b-4a9a-8206-5584ff7c6af1";
+            FetchCourseDetails(id).then(courseDetails => {
                 if (courseDetails) {
                     console.log(courseDetails);
                     loadCourseDetails(courseDetails);
@@ -443,8 +442,8 @@
             });
         });
 
-        function EnrollInCourse(){
-        }
+        // function EnrollInCourse(){
+        // }
         
     </script>
 </body>

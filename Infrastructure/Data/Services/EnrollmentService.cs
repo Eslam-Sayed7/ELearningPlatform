@@ -20,24 +20,32 @@ namespace Infrastructure.Services.Enrollservice
             var student =
             (await _unitOfWork.Repository<Student>()
                 .FindAsync(s => s.Id == studentId)).FirstOrDefault();
-            
+
             if (student == null)
-                throw new KeyNotFoundException($"Student with {studentId} ID not found.");
+            {
+                return new EnrollmentDto()
+                {
+                    Message = $"Student with {studentId} ID not found.",
+                    IsEnrolled = false
+                };
+            }
 
             var course = (await _unitOfWork.Repository<Course>()
                     .FindAsync(c => c.CourseId == courseId)).FirstOrDefault();
             if (course == null)
-                throw new KeyNotFoundException($"This course Is not found");
+                return new EnrollmentDto()
+                {
+                    Message = $"This course Is not found",
+                    IsEnrolled = false
+                };
 
             var existingEnrollment = await CheckEnrollmentStatusAsync(studentId, courseId);
             
             if (existingEnrollment){
 
-                var enroll = new EnrollmentDto {
-                        Message = $"{studentId} is already enrolled in course {courseId}."
-                    };
-                
-                return enroll;
+                return new EnrollmentDto {
+                    Message = $"{studentId} is already enrolled in course {courseId}."
+                };
             }
 
             _unitOfWork.BeginTransactionAsync();

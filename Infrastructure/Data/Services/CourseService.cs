@@ -16,12 +16,50 @@ public class CourseService : ICourseService
         _UnitOfWork = unitOfWork;
     }
     //TODO
-    public async Task<Course> GetCourseByIdAsync(Guid Id)
+    public async Task<CourseCardDto> GetCourseCardByIdAsync(Guid Id)
     {
         
-        var course = await _UnitOfWork.Repository<Course>()
-            .FindAsync(c => c.CourseId.ToString().ToUpper() == Id.ToString().ToUpper());
-        return course.FirstOrDefault();
+        var searchcourse = await _UnitOfWork.Repository<Course>()
+            .FindAsync(c => c.CourseId.ToString().ToUpper() == Id.ToString().ToUpper() , 
+                include: q => q.Include( I => I.InstructorsToCourses)
+                    .Include(q => q.Category));
+        
+        var course = searchcourse.FirstOrDefault();
+        return new CourseCardDto()
+        {
+            CourseId = course.CourseId,
+            CourseName = course.CourseName,
+            Instructor = course.Instructors.FirstOrDefault().ToString(),
+            CategoryName = course.Category.ToString(),
+            ThumbnailUrl = course.ThumbnailUrl,
+            Price = course.Price,
+            CourseDescription = course.Description
+        };
+
+    }
+
+    public async Task<GetCourseDto> GetCourseByIdAsync(Guid Id)
+    {
+        var searchcourse = await _UnitOfWork.Repository<Course>()
+            .FindAsync(c => c.CourseId.ToString().ToUpper() == Id.ToString().ToUpper() , 
+                include: q => q.Include( I => I.InstructorsToCourses)
+                    .Include(c => c.Category));
+        
+        var course = searchcourse.FirstOrDefault();
+        var instructorName = $"{course.Instructors.FirstOrDefault().Appuser.FirstName }{course.Instructors.FirstOrDefault().Appuser.LastName}";
+        return new GetCourseDto()
+        {
+            CourseId = course.CourseId,
+            CourseName = course.CourseName,
+            Description = course.Description,
+            Instructor = instructorName ,
+            Level = course.Level,
+            CategoryName = course.Category.CategoryName,
+            ThumbnailUrl = course.ThumbnailUrl,
+            Price = course.Price,
+            Duration = course.Duration,
+            Language = course.Language
+        };
     }
 
     public async Task<IList<CourseCardDto>> GetPopularCoursesPaged()
@@ -40,7 +78,7 @@ public class CourseService : ICourseService
             var courseDto = new CourseCardDto()
             {
                 CourseId = c.CourseId,
-                Category = c.Category.CategoryName,
+                CategoryName = c.Category.CategoryName,
                 CourseName = c.CourseName,
                 ThumbnailUrl = c.ThumbnailUrl,
                 Price = c.Price

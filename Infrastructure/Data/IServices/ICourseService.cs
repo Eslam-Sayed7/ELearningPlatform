@@ -8,7 +8,9 @@ namespace Infrastructure.Data.IServices;
 
 public interface ICourseService
 {
-    Task<Course> GetCourseByIdAsync(Guid Id);
+    Task<CourseCardDto> GetCourseCardByIdAsync(Guid Id);
+
+    Task<GetCourseDto> GetCourseByIdAsync(Guid Id);
 
     Task<IList<CourseCardDto>> GetPopularCoursesPaged();
 

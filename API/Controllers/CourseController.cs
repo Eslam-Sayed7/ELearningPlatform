@@ -19,30 +19,31 @@ namespace API.Controllers
             _courseService = courseService;
         }
 
-        // [HttpGet("{id}")]
-        [HttpPost("GetCourse")]
-        public async Task<ActionResult<Course>> GetCourseById(GetCourseModel model)
-        {
-            var course = await _courseService.GetCourseByIdAsync(model.CourseId);
-            // if (course == null)
-            // {
-            //     return NotFound();
-            // }
-            var courseDto = new Course
-            {
+        // [HttpGet("Get")]
+        // // [HttpPost("GetCourse")]
+        // public async Task<ActionResult<GetCourseDto>> GetCourseById([FromBody] GetCourseModel model)
+        // {
+        //     // var course = await _courseService.GetCourseByIdAsync(model.CourseId);
+        //     var course = await _courseService.GetCourseByIdAsync(model.CourseId);
+        //     if (course == null)
+        //     {
+        //         return NotFound();
+        //     }
+        //     var courseDto = new GetCourseDto()
+        //     {
+        //         CourseName = course.CourseName,
+        //         Description = course.Description,
+        //         Level = course.Level,
+        //         Price = course.Price,
+        //         Duration = course.Duration,
+        //         ThumbnailUrl = course.ThumbnailUrl,
+        //         Language = course.Language,
+        //         Instructor = course.Instructor
+        //     };
+        //     return Ok(courseDto);
+        // }
 
-                CourseName = course.CourseName,
-                Description = course.Description,
-                Level = course.Level,
-                Price = course.Price,
-                Duration = course.Duration,
-                ThumbnailUrl = course.ThumbnailUrl,
-                Language = course.Language,
-                UpdatedAt = course.UpdatedAt
-            };
-            return Ok(courseDto);
-        }
-
+        
         [HttpGet("Popular")]
         public async Task<ActionResult<IEnumerable<CourseCardDto>>> GetCoursesPagse()
         {
@@ -50,7 +51,7 @@ namespace API.Controllers
 
             return Ok(courses);
         }
-
+        
         [HttpPost("CoursesByCategory")]
         public async Task<ActionResult<IList<CourseCardDto>>> GetCoursesByCategory(
             [FromBody] FilterByCategoryRequest request)
@@ -69,7 +70,7 @@ namespace API.Controllers
                 {
                     CourseId = c.CourseId,
                     CourseName = c.CourseName,
-                    Category = c.Category.CategoryName,
+                    CategoryName = c.Category.CategoryName,
                     ThumbnailUrl = c.ThumbnailUrl,
                     Price = c.Price
                 };
@@ -78,7 +79,6 @@ namespace API.Controllers
 
             return ((result.Any()) ? Ok(result) : Ok());
         }
-
 
         // Delete a course
         [HttpDelete("{id}")]
