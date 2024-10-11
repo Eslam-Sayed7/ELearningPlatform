@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Infrastructure.Base;
+using Infrastructure.Data;
 using Infrastructure.Data.IServices;
 using Infrastructure.Data.Models;
 using Infrastructure.Dtos;
@@ -13,9 +14,10 @@ namespace API.Controllers
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
-
-        public CourseController(ICourseService courseService)
+        private readonly AppDbContext _context;
+        public CourseController(ICourseService courseService,AppDbContext context)
         {
+            _context = context;
             _courseService = courseService;
         }
 
@@ -81,22 +83,22 @@ namespace API.Controllers
 
 
         // Delete a course
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCourse(Guid id)
-        {
-            var course = await _courseService.GetCourseByIdAsync(id);
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteCourse(Guid id)
+        //{
+        //    var course = await _courseService.GetCourseByIdAsync(id);
 
-            if (course == null)
-            {
-                return NotFound();
-            }
+        //    if (course == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            // TODO delete funct want to be implemented first inside te unitofworkclass
-            // _context.Courses.Remove(course);
-            // await _context.SaveChangesAsync();
+        //    // TODO delete funct want to be implemented first inside te unitofworkclass
+        //    // _context.Courses.Remove(course);
+        //    // await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         // Helper method to check if a course exists
         private async Task<bool> CourseExists(Guid id)
@@ -122,44 +124,87 @@ namespace API.Controllers
             return Ok(new { url = fileUrl });
         }
 
-        // [HttpPost]
-        // public async Task<ActionResult<Course>> AddCourse([FromBody] Course courseDto)
-        // {
-        //     if (courseDto == null)
-        //     {
-        //         return BadRequest("Course data is required.");
-        //     }
-        //
-        //     var course = new Course
-        //     {
-        //         CourseName = courseDto.CourseName,
-        //         Description = courseDto.Description,
-        //         Level = courseDto.Level,
-        //         Price = courseDto.Price,
-        //         Duration = courseDto.Duration,
-        //         ThumbnailUrl = courseDto.ThumbnailUrl,
-        //         Language = courseDto.Language,
-        //         Tags = courseDto.Tags,
-        //         Category = courseDto.Category,
-        //         CreatedAt = DateTime.UtcNow,
-        //         UpdatedAt = DateTime.UtcNow
-        //     };
-        //
-        //     _context.Courses.Add(course);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return CreatedAtAction(nameof(GetCourseById), new { id = course.Id }, course); // Return the new course with its ID
-        // }
+        //[HttpPost("AddCourse")]
+        //public async Task<ActionResult<Course>> AddCourse([FromBody] AddCourseModel request)
+        //{
+        //    if (request == null)
+        //    {
+        //        return BadRequest("Invalid course data.");
+        //    }
 
-        //
-        // [HttpPost("AddCourse")]
-        // public async Task<ActionResult<Course>> AddCourse([FromBody] AddCourseModel request)
-        // {
-        //     // if (!ModelState.IsValid)
-        //         // return BadRequest(ModelState);
-        //     var course = await _courseService.AddCourse(request);
-        //     return Ok(course);
-        // }
+        //    var newCourse = new Course
+        //    {
+        //        CourseName = request.CourseName,
+        //        Description = request.Description,
+        //        Level = request.Level,
+        //        Price = request.Price,
+        //        Duration = request.Duration,
+        //        ThumbnailUrl = request.ThumbnailUrl,
+        //        Language = request.Language,
+        //        CreatedAt = DateTime.UtcNow,
+        //        UpdatedAt = DateTime.UtcNow
+        //    };
+
+        //    var createdCourse = await _courseService.AddCourseAsync(newCourse);
+        //    if (createdCourse == null)
+        //    {
+        //        return StatusCode(500, "An error occurred while creating the course.");
+        //    }
+
+        //    return Ok(createdCourse);
+        //}
+        [HttpPost("AddCourse")]
+        public async Task<ActionResult<Course>> AddCourse([FromBody] AddCourseModel model)
+        {
+            if (model == null)
+            {
+                return BadRequest("Invalid course data.");
+            }
+
+            try
+            {
+                // Call the service to add the course
+                var createdCourse = await _courseService.AddCourse(model);
+
+                // Return the created course as a response
+                return CreatedAtAction(nameof(GetCourseById), new { id = createdCourse.CourseId }, createdCourse);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception and return an error response
+                return StatusCode(500, $"An error occurred while creating the course: {ex.Message}");
+            }
+        }
+
+        //public async Task<IActionResult> DeleteCourse(string id)
+        //{
+        //    // Call the service method to delete the course
+        //    var result = await _courseService.DeleteCourseAsync(id);
+
+        //    //if (!result)
+        //    //{
+        //    //    return NotFound();  // If course not found, return 404 Not Found
+        //    //}
+
+        //    return NoContent();  // If successful, return 204 No Content
+        //}
+
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteCourse(GetCourseModel model)
+        {
+            var course = await _courseService.GetCourseByIdAsync(model.CourseId);
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            _context.Courses.Remove(course);
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
 
     }
 }

@@ -145,6 +145,21 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         await _dbSet.AddRangeAsync(entities, cancellationToken);
     }
-    
-    
+
+    public async Task DeleteAsync(T entity)
+    {
+        _dbSet.Remove(entity);
+        await Task.CompletedTask; 
+    }
+
+    public async Task DeleteByIdAsync(Guid id)
+    {
+        var entity = await _dbSet.FindAsync(id);
+        if (entity != null)
+        {
+            _dbSet.Remove(entity);
+        }
+        await Task.CompletedTask;  
+    }
+
 }
