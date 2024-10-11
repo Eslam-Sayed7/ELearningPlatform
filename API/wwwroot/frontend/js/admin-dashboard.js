@@ -2,7 +2,6 @@
 function toggleCourseSelection(card) {
     card.classList.toggle('selected');
 }
-
 // Function to delete selected courses
 async function deleteSelectedCourses() {
     const selectedCourses = document.querySelectorAll('.course-card.selected');
@@ -15,11 +14,17 @@ async function deleteSelectedCourses() {
     const confirmDelete = confirm("Are you sure you want to delete the selected courses?");
     if (!confirmDelete) return;
 
+    // Show a loading spinner or disable the delete button (optional)
+    deleteButton.disabled = true;
+    deleteButton.textContent = "Deleting...";
+
+    const failedDeletions = [];
+
     for (const course of selectedCourses) {
-        const courseId = course.id; // Extract the courseId from the card's id (e.g., course-1234)
+        const courseId = course.id; // Use a data attribute like data-course-id instead of the card id
 
         try {
-            const response = await fetch(`${appUrl}Courses/${courseId}`, {
+            const response = await fetch(`${appUrl}Courses/delete/${courseId}`, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json'
@@ -27,19 +32,31 @@ async function deleteSelectedCourses() {
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to delete course: ${courseId}`);
+                throw new Error(`Failed to delete course with ID: ${courseId}`);
             }
 
-            course.remove();
+            course.remove(); // Remove the course element from the DOM if successful
 
         } catch (error) {
             console.error('Error deleting course:', error);
+            failedDeletions.push(courseId); // Track any course deletions that failed
         }
+    }
+
+    // Re-enable the delete button
+    deleteButton.disabled = false;
+    deleteButton.textContent = "Delete Selected";
+
+    // Notify the user of the result
+    if (failedDeletions.length === 0) {
+        alert("Selected courses were successfully deleted.");
+    } else {
+        alert(`Some courses could not be deleted: ${failedDeletions.join(', ')}`);
     }
 }
 
 // Add an event listener to the delete button to trigger deletion
-deleteButton = document.querySelector(".delete-btn")
+const deleteButton = document.querySelector(".delete-btn");
 deleteButton.addEventListener('click', deleteSelectedCourses);
 
 
@@ -97,10 +114,6 @@ deleteButton.addEventListener('click', deleteSelectedCourses);
     const courseDuration = document.getElementById("courseDuration").value;
     const courseImage = document.getElementById("courseImage").value;
     const courseLanguage = document.getElementById("courseLanguage").value;
-    const courseTags = document.getElementById("courseTags").value.split(',').map(tag => tag.trim());
-    const courseMaterialFilePath = document.getElementById("courseMaterialFilePath").value;
-    const courseMaterialFileType = document.getElementById("courseMaterialFileType").value;
-    const courseMaterialDescription = document.getElementById("courseMaterialDescription").value;
 
     // Add your logic to save the course information
     console.log({
@@ -112,10 +125,6 @@ deleteButton.addEventListener('click', deleteSelectedCourses);
         courseDuration,
         courseImage,
         courseLanguage,
-        courseTags,
-        courseMaterialFilePath,
-        courseMaterialFileType,
-        courseMaterialDescription
     });
 
     // Close the modal after submission
@@ -129,3 +138,22 @@ deleteButton.addEventListener('click', deleteSelectedCourses);
 document.addEventListener("DOMContentLoaded", function() {
 });
 
+
+// Handle search input
+document.getElementById('search-course').addEventListener('input', function() {
+    const query = this.value.toLowerCase(); // Get the search query
+    const courses = document.querySelectorAll('.course-card'); // Assuming each course is in a div with class "course-card"
+
+    // Loop through the courses and filter them
+    courses.forEach(course => {
+        const courseName = course.querySelector('.course-card h3').textContent.toLowerCase(); // Assuming course name is in an element with class "course-name"
+        const courseId = course.getAttribute('id').toLowerCase(); // Assuming each course card has a data attribute like data-course-id
+
+        // Check if the course name or course ID matches the search query
+        if (courseName.includes(query) || courseId.includes(query)) {
+            course.style.display = 'block'; // Show matching courses
+        } else {
+            course.style.display = 'none'; // Hide non-matching courses
+        }
+    });
+});

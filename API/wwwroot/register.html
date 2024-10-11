@@ -18,7 +18,7 @@
                 <div class="input-group name">
                     <div class="name-field">
                         <label>First Name</label>
-                        <input type="text" id = "firstname" requiس>
+                        <input type="text" id = "firstname" required>
                     </div>
                     <div class="name-field">
                         <label>Last Name</label>
@@ -63,46 +63,5 @@
         </div>
     </div>
     <script src="scripts.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        document.querySelector('.register-form').addEventListener('submit', async function (event) {
-            event.preventDefault();
-
-                let Password = document.getElementById('password-1').value;
-                let ConfirmPassword = document.getElementById('password-1').value;
-
-                if( Password == ConfirmPassword ){
-                    const data = {
-                        FirstName: document.getElementById('firstname').value,
-                        LastName: document.getElementById('lastname').value,
-                        Username : document.getElementById('username').value,
-                        Email: document.getElementById('email').value,
-                        Password: document.getElementById('password-1').value
-                    };
-                    try {
-                        const response = await fetch('http://localhost:5164/api/Auth/register', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(data),
-                        });
-
-                        if (response.ok) {
-                            alert('Registered successfully!');
-                            
-                        } else {
-                            alert('Error submitting form.');
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                    }
-                } else{
-                    alert('The passwords are not matching');
-                }
-            });
-        });
-
-    </script>
 </body>
 </html>

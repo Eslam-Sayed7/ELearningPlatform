@@ -1,5 +1,5 @@
 // Elements
-const appUrl = `http://localhost:7205/`; // Base URL for your API
+const appUrl = `http://localhost:5164/api/`; // Base URL for your API
 const coursesContainer = document.querySelector(".courses-section"); // Select the container
 const prevButton = document.getElementById('prevButton'); // Select the Previous button
 const nextButton = document.getElementById('nextButton'); // Select the Next button
@@ -11,7 +11,7 @@ let allCourses = []; // Array to hold all fetched courses
 // Function to fetch courses
 async function fetchCourses() {
     try {
-        const response = await fetch(`${appUrl}Courses`, {
+        const response = await fetch(`${appUrl}Course/Popular`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json' // Adjust this based on your API's requirements
@@ -60,16 +60,7 @@ function createCourseElements(courses) {
         courseName.textContent = course.courseName;
 
         const description = document.createElement('p');
-        description.textContent = course.description;
-
-        const language = document.createElement('p');
-        language.innerHTML = `<strong>Language:</strong> ${course.language}`;
-
-        const duration = document.createElement('p');
-        duration.innerHTML = `<strong>Duration:</strong> ${course.duration} hours`;
-
-        const level = document.createElement('p');
-        level.innerHTML = `<strong>Level:</strong> ${course.level}`;
+        description.textContent = course.category;
 
         const price = document.createElement('p');
         price.innerHTML = `<strong>Price:</strong> $${course.price.toFixed(2)}`;
@@ -77,9 +68,6 @@ function createCourseElements(courses) {
         courseCard.appendChild(thumbnail);
         courseCard.appendChild(courseName);
         courseCard.appendChild(description);
-        courseCard.appendChild(language);
-        courseCard.appendChild(duration);
-        courseCard.appendChild(level);
         courseCard.appendChild(price);
 
         coursesContainer.appendChild(courseCard);
@@ -173,7 +161,6 @@ function loadCoursesCounts(totalCourses) {
 }
 
 
-
 const courseForm = document.getElementById('courseForm');
 
 courseForm.addEventListener('submit', async (e) => {
@@ -186,13 +173,13 @@ courseForm.addEventListener('submit', async (e) => {
     const courseData = {
         courseName: formData.get('courseName'),
         description: formData.get('courseDescription'),
-        category: formData.get('courseCategory'),
+        categoryId: formData.get('courseCategory'), // Ensure this is a valid Guid in the backend
         level: formData.get('courseLevel'),
         price: parseFloat(formData.get('coursePrice')),
-        duration: parseFloat(formData.get('courseDuration')),
+        duration: parseInt(formData.get('courseDuration'), 10),
         language: formData.get('courseLanguage'),
-        tags: formData.get('courseTags'),
         thumbnailUrl: '', // This will be set after image upload
+        sections: [] // Add logic to handle sections if needed
     };
 
     // Handle image upload
@@ -209,7 +196,7 @@ courseForm.addEventListener('submit', async (e) => {
 
     // Submit course data to the API
     try {
-        const response = await fetch(`${appUrl}Courses`, {
+        const response = await fetch(`${appUrl}Course/AddCourse`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -234,7 +221,7 @@ async function uploadImage(file) {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch(`${appUrl}Upload`, {
+    const response = await fetch(`${appUrl}Course/Upload`, {
         method: 'POST',
         body: formData,
     });

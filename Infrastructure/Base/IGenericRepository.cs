@@ -35,4 +35,8 @@ public interface IGenericRepository<T> where T : class
         ISpecification<T> specification);
 
     public Task UpdateEntity(T entity);
+
+    Task DeleteAsync(T entity);
+
+    Task DeleteByIdAsync(Guid id); // Optional, for deleting by ID
 }
