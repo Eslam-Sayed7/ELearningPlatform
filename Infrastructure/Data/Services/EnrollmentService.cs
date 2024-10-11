@@ -52,38 +52,41 @@ namespace Infrastructure.Services.Enrollservice
             
             double amount = course.Price;
             
-            PaymentService paymentService = new PaymentService(_unitOfWork);
-            Payment payment = await paymentService.ProcessPaymentAsync(studentId, courseId , amount , discount); 
+            // TODO NOT COMPLETE FEATURE
+            // PaymentService paymentService = new PaymentService(_unitOfWork);
+            // Payment payment = await paymentService.ProcessPaymentAsync(studentId, courseId , amount , discount); 
+            //
+            // if(payment.paymentStatus == PaymentStatus.Completed){
+            //
+            // } else
+            // {
+            //     _unitOfWork.RollbackTransactionAsync();
+            //     var enroll = new EnrollmentDto {
+            //         Message = "Complete Course payment first to get enrolled",
+            //         IsEnrolled = false
+            //     };
+            //     return enroll;
+            // }
 
-            if(payment.paymentStatus == PaymentStatus.Completed){
-                var enrollment = new Enrollment
-                {
-                    StudentId = studentId,
-                    CourseId = courseId,
-                    EnrollmentDate = DateTime.UtcNow,
-                    ProgressPercentage = 0,
-                    PaymentId =  payment.PaymentId
-                };
-                await _unitOfWork.Repository<Enrollment>().AddAsync(enrollment);
-                await _unitOfWork.CompleteAsync();
-
-                var enroll = new EnrollmentDto {
-                    Message = "You have Enrolled Successfully",
-                    IsEnrolled = true
-                };
-                _unitOfWork.CommitTransactionAsync();
-                _unitOfWork.CompleteAsync();
-                return enroll;
-
-            } else
+            var enrollment = new Enrollment
             {
-                _unitOfWork.RollbackTransactionAsync();
-                var enroll = new EnrollmentDto {
-                    Message = "Complete Course payment first to get enrolled",
-                    IsEnrolled = false
-                };
-                return enroll;
-            }
+                StudentId = studentId,
+                CourseId = courseId,
+                EnrollmentDate = DateTime.UtcNow,
+                ProgressPercentage = 0,
+                // PaymentId =  payment.PaymentId
+            };
+            await _unitOfWork.Repository<Enrollment>().AddAsync(enrollment);
+            await _unitOfWork.CompleteAsync();
+
+            var enroll = new EnrollmentDto {
+                Message = "You have Enrolled Successfully",
+                IsEnrolled = true
+            };
+            _unitOfWork.CommitTransactionAsync();
+            _unitOfWork.CompleteAsync();
+            return enroll;
+
         }
 
         public async Task<bool> CheckEnrollmentStatusAsync(Guid studentId, Guid courseId)

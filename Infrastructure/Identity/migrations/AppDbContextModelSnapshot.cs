@@ -189,44 +189,6 @@ namespace Infrastructure.Identity.migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("Core.Entities.CourseMaterial", b =>
-                {
-                    b.Property<Guid>("MaterialId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("MaterialID");
-
-                    b.Property<Guid?>("CourseId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("MaterialSequence")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaterialType")
-                        .HasColumnType("INT");
-
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("SectionID");
-
-                    b.Property<string>("TextContent")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR(255)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("Url");
-
-                    b.HasKey("MaterialId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("SectionId");
-
-                    b.ToTable("CourseMaterials", (string)null);
-                });
-
             modelBuilder.Entity("Core.Entities.CourseSection", b =>
                 {
                     b.Property<Guid>("SectionId")
@@ -238,10 +200,9 @@ namespace Infrastructure.Identity.migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("CourseID");
 
-                    b.Property<int>("LastMaterialSequence")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INT")
-                        .HasDefaultValue(0);
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(255)");
 
                     b.Property<int>("SectionSequence")
                         .ValueGeneratedOnAdd()
@@ -270,9 +231,6 @@ namespace Infrastructure.Identity.migrations
                     b.Property<DateTime?>("EnrollmentDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("PaymentId")
-                        .HasColumnType("TEXT");
-
                     b.Property<double?>("ProgressPercentage")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("REAL")
@@ -284,8 +242,6 @@ namespace Infrastructure.Identity.migrations
                     b.HasKey("EnrollmentId");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("PaymentId");
 
                     b.HasIndex("StudentId");
 
@@ -341,44 +297,12 @@ namespace Infrastructure.Identity.migrations
                     b.ToTable("InstructorsToCourse");
                 });
 
-            modelBuilder.Entity("Core.Entities.Payment", b =>
-                {
-                    b.Property<Guid>("PaymentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("Amount")
-                        .HasMaxLength(50)
-                        .HasColumnType("REAL");
-
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double?>("Discount")
-                        .HasColumnType("REAL");
-
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("TransactionDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("paymentStatus")
-                        .HasMaxLength(50)
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("PaymentId");
-
-                    b.ToTable("Payment");
-                });
-
             modelBuilder.Entity("Core.Entities.Progress", b =>
                 {
-                    b.Property<int>("ProgressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.Property<Guid>("EnrollmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SectionId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsCompleted")
@@ -386,15 +310,9 @@ namespace Infrastructure.Identity.migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
-                    b.Property<Guid>("MaterialId")
-                        .HasColumnType("TEXT");
+                    b.HasKey("EnrollmentId", "SectionId");
 
-                    b.HasKey("ProgressId");
-
-                    b.HasIndex("EnrollmentId")
-                        .IsUnique();
-
-                    b.HasIndex("MaterialId");
+                    b.HasIndex("SectionId");
 
                     b.ToTable("Progresses", (string)null);
                 });
@@ -445,19 +363,19 @@ namespace Infrastructure.Identity.migrations
                     b.HasData(
                         new
                         {
-                            Id = "4c7ae234-a320-416f-b983-0a295ce5f2a4",
+                            Id = "2e94f545-b03d-439f-8aa0-65719b8e663e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "cf135e10-4bbc-4a65-88bc-9f3705659d3e",
+                            Id = "67b51ef3-e989-46eb-b492-133a93910c72",
                             Name = "Instructor",
                             NormalizedName = "Instructor"
                         },
                         new
                         {
-                            Id = "1a2a5fa4-37bd-440a-b592-f0bb8aeb4f72",
+                            Id = "861dceeb-74d2-41d7-96ff-a02b33879136",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
@@ -584,21 +502,6 @@ namespace Infrastructure.Identity.migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Core.Entities.CourseMaterial", b =>
-                {
-                    b.HasOne("Core.Entities.Course", null)
-                        .WithMany("CourseMaterials")
-                        .HasForeignKey("CourseId");
-
-                    b.HasOne("Core.Entities.CourseSection", "Section")
-                        .WithMany("CourseMaterials")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Section");
-                });
-
             modelBuilder.Entity("Core.Entities.CourseSection", b =>
                 {
                     b.HasOne("Core.Entities.Course", "Course")
@@ -618,12 +521,6 @@ namespace Infrastructure.Identity.migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Payment", "Payment")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("Core.Entities.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
@@ -631,8 +528,6 @@ namespace Infrastructure.Identity.migrations
                         .IsRequired();
 
                     b.Navigation("Course");
-
-                    b.Navigation("Payment");
 
                     b.Navigation("Student");
                 });
@@ -666,20 +561,20 @@ namespace Infrastructure.Identity.migrations
             modelBuilder.Entity("Core.Entities.Progress", b =>
                 {
                     b.HasOne("Core.Entities.Enrollment", "Enrollment")
-                        .WithOne("Progress")
-                        .HasForeignKey("Core.Entities.Progress", "EnrollmentId")
+                        .WithMany("Progresses")
+                        .HasForeignKey("EnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.CourseMaterial", "Material")
+                    b.HasOne("Core.Entities.CourseSection", "Section")
                         .WithMany()
-                        .HasForeignKey("MaterialId")
+                        .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Enrollment");
 
-                    b.Navigation("Material");
+                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("Core.Entities.Student", b =>
@@ -753,8 +648,6 @@ namespace Infrastructure.Identity.migrations
 
             modelBuilder.Entity("Core.Entities.Course", b =>
                 {
-                    b.Navigation("CourseMaterials");
-
                     b.Navigation("CourseSections");
 
                     b.Navigation("Enrollments");
@@ -762,25 +655,14 @@ namespace Infrastructure.Identity.migrations
                     b.Navigation("InstructorsToCourses");
                 });
 
-            modelBuilder.Entity("Core.Entities.CourseSection", b =>
-                {
-                    b.Navigation("CourseMaterials");
-                });
-
             modelBuilder.Entity("Core.Entities.Enrollment", b =>
                 {
-                    b.Navigation("Progress")
-                        .IsRequired();
+                    b.Navigation("Progresses");
                 });
 
             modelBuilder.Entity("Core.Entities.Instructor", b =>
                 {
                     b.Navigation("InstructorsToCourses");
-                });
-
-            modelBuilder.Entity("Core.Entities.Payment", b =>
-                {
-                    b.Navigation("Enrollments");
                 });
 
             modelBuilder.Entity("Core.Entities.Student", b =>

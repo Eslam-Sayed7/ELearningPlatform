@@ -13,12 +13,12 @@ public class CourseSectionConfiguration : IEntityTypeConfiguration<CourseSection
         builder.Property(e => e.CourseId).HasColumnName("CourseID");
         builder.Property(e => e.Title).HasColumnType("NVARCHAR(255)");
         builder.Property(e => e.SectionSequence).HasColumnType("INT").HasDefaultValue(0);
-        builder.Property(e => e.LastMaterialSequence).HasColumnType("INT").HasDefaultValue(0);
-        
+        builder.Property(e => e.Link).HasColumnType("NVARCHAR(255)");
         builder.HasOne(d => d.Course)
             .WithMany(p => p.CourseSections)
             .HasForeignKey(d => d.CourseId)
             .IsRequired();
+        
         
         builder.ToTable("CoursesSections");
     }

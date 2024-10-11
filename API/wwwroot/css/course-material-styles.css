@@ -1,0 +1,61 @@
+body {
+    /* background-image: url('/img/registration-bg.png'); */
+    /* background-color:bisque; */
+    font-family: "Montserrat", sans-serif;
+}
+
+h1, h2 {
+    font-size: x-large;
+    color: #000000; 
+    font-family: "Playfair Display", serif;
+    font-weight: bold;
+}
+
+.btn-outline-primary {
+    border-color: #7F7FD5;
+    color: #7F7FD5;
+}
+
+.btn-outline-primary:hover {
+    background-color: #7F7FD5;
+    color: white;
+}
+
+.form-check-label {
+    margin-left: 0.5rem;
+}
+
+.fa-x-twitter {
+    color: black;
+}
+
+.default-header{
+    padding-bottom: 20px;
+}
+
+.navbar{
+    background-color: white;
+    padding-bottom: 40px;
+}
+
+.navbar .icons i {
+    color: black;
+}
+.navbar .logo {
+    color: rgb(130, 32, 160);
+}
+.navbar .logo h1 {
+    color: black;
+}
+.navbar .icons a {
+    color: black;
+    transition:0.2s;
+}
+
+.navbar .icons a:hover {
+    color: #7F7FD5;
+}
+
+/* .fa-square-facebook{
+    color: black;
+} */

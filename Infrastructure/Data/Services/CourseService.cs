@@ -97,7 +97,7 @@ public class CourseService : ICourseService
     }
 
 
-
+    // TODO NOT COMPLETE YET
     public async Task<Course> AddCourse(AddCourseModel model)
     {
         if (model == null)
@@ -134,21 +134,7 @@ public class CourseService : ICourseService
 
             newCourse.CourseSections.Add(courseSection);  // Attach section to the course
 
-            // Add section materials if provided
-            foreach (var materialModel in sectionModel.Materials)
-            {
-                var courseMaterial = new CourseMaterial
-                {
-                    MaterialId = Guid.NewGuid(),
-                    SectionId = courseSection.SectionId,
-                    MaterialType = materialModel.MaterialType,
-                    TextContent = materialModel.TextContent,
-                    Url = materialModel.Url,
-                    MaterialSequence = materialModel.MaterialSequence
-                };
-
-                courseSection.CourseMaterials.Add(courseMaterial);  // Attach materials to the section
-            }
+           
         }
 
         // Add the course to the repository

@@ -1,0 +1,89 @@
+body {
+    font-family: monospace;
+    color: #FFFFFF;
+    height: 100vh;
+    overflow-x: hidden;
+    background-color: #ffffff; /* Primary purple background */
+}
+
+.sidebar {
+    height: 100vh;
+    padding-top: 2rem;
+    position: fixed;
+    background: linear-gradient(200deg, #7e3c75, #462f76); /* 3D-like gradient effect */
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5), 
+                -4px -4px 10px rgba(255, 255, 255, 0.1); /* Shadow for depth */
+    border-radius: 0 10px 10px 0; /* Rounded edge for modern feel */
+}
+
+.sidebar .nav-link {
+    color: #e0d8e8; /* Lighter grey for links */
+    transition: all 0.3s ease-in-out; /* Smooth transition */
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+    color: #FFFFFF; /* White for active or hover */
+    text-shadow: 0 0 10px rgba(177, 106, 106, 0.8); /* Glow effect on hover/active */
+}
+
+.profile-pic .initials {
+    width: 100px;
+    height: 100px;
+    background-color: #a683ec; /* Lighter purple for initials background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    color: #FFFFFF;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Slight shadow for 3D effect */
+}
+
+.main-content {
+    margin-left: 250px;
+    padding: 2rem;
+    background-color: #FFFFFF; /* White background for form section */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+    color: #691150; /* Text color matches sidebar */
+}
+
+h1, h4 {
+    color: #570640; /* Dark purple for headings */
+}
+
+input, select, textarea {
+    background-color: rgba(0, 0, 0, 0.05); /* Light grey input background */
+    border: 1px solid #d1cfe0; /* Light border for inputs */
+    color: #570640; /* Dark purple input text */
+    padding: 0.75rem;
+    border-radius: 5px;
+}
+
+input::placeholder, textarea::placeholder {
+    color: #8e8e8e; /* Placeholder text color */
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.6); /* Green focus effect */
+}
+
+button {
+    background-color: #9c6cfc; /* Lighter purple for buttons */
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    color: #FFFFFF; /* White text on button */
+    transition: background-color 0.3s ease-in-out; /* Smooth transition */
+}
+
+button:hover {
+    background-color: #652252; /* Darker purple on hover */
+}
+
+label {
+    color: #652352; /* Dark purple for labels */
+}

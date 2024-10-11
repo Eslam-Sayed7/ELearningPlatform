@@ -23,7 +23,7 @@ namespace API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var enrollmentResult = await _enrollService.EnrollInCourse(request.CourseId, request.UserId);
+            var enrollmentResult = await _enrollService.EnrollInCourse(request.CourseId, request.StudentId);
             EnrollmentDto enroll = new EnrollmentDto
             {
                 Message = enrollmentResult.Message

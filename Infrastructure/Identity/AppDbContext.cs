@@ -24,9 +24,9 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
     public virtual DbSet<Student> Students { get; set; }
     public virtual DbSet<Instructor> Instructors { get; set; }
     public virtual DbSet<CourseSection> CourseSections { get; set; }
-    public virtual DbSet<CourseMaterial> CourseMaterials { get; set; }
     public virtual DbSet<Enrollment> Enrollments { get; set; }
     public virtual DbSet<Progress> Progresses { get; set; }
+    // public virtual DbSet<CourseMaterial> CourseMaterials { get; set; }
     // public virtual DbSet<TextContent> TextContents { get; set; }
     // public virtual DbSet<VideoContent> VideoContents { get; set; }
 
@@ -45,11 +45,11 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
         modelBuilder.ApplyConfiguration(new CoursesConfiguration());
         modelBuilder.ApplyConfiguration(new EnrollmentsConfiguration());
         modelBuilder.ApplyConfiguration(new CourseSectionConfiguration());
-        modelBuilder.ApplyConfiguration(new CourseMaterialConfiguration());
-        modelBuilder.ApplyConfiguration(new PaymensConfiguration());
         modelBuilder.ApplyConfiguration(new EnrollmentsConfiguration());
         modelBuilder.ApplyConfiguration(new ProgressConfiguration());
         
+        // modelBuilder.ApplyConfiguration(new PaymensConfiguration());
+        // modelBuilder.ApplyConfiguration(new CourseMaterialConfiguration());
         // modelBuilder.ApplyConfiguration(new TextContentConfiguration());
         // modelBuilder.ApplyConfiguration(new VideoContentConfiguration());
 

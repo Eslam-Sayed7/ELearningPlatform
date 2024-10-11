@@ -153,28 +153,28 @@ namespace API.Controllers
 
         //    return Ok(createdCourse);
         //}
-        [HttpPost("AddCourse")]
-        public async Task<ActionResult<Course>> AddCourse([FromBody] AddCourseModel model)
-        {
-            if (model == null)
-            {
-                return BadRequest("Invalid course data.");
-            }
-
-            try
-            {
-                // Call the service to add the course
-                var createdCourse = await _courseService.AddCourse(model);
-
-                // Return the created course as a response
-                return CreatedAtAction(nameof(GetCourseById), new { id = createdCourse.CourseId }, createdCourse);
-            }
-            catch (Exception ex)
-            {
-                // Handle the exception and return an error response
-                return StatusCode(500, $"An error occurred while creating the course: {ex.Message}");
-            }
-        }
+        // [HttpPost("AddCourse")]
+        // public async Task<ActionResult<Course>> AddCourse([FromBody] AddCourseModel model)
+        // {
+        //     if (model == null)
+        //     {
+        //         return BadRequest("Invalid course data.");
+        //     }
+        //
+        //     try
+        //     {
+        //         // Call the service to add the course
+        //         var createdCourse = await _courseService.AddCourse(model);
+        //
+        //         // Return the created course as a response
+        //         return CreatedAtAction(nameof(GetCourseById), new { id = createdCourse.CourseId }, createdCourse);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         // Handle the exception and return an error response
+        //         return StatusCode(500, $"An error occurred while creating the course: {ex.Message}");
+        //     }
+        // }
 
         //public async Task<IActionResult> DeleteCourse(string id)
         //{
@@ -189,22 +189,22 @@ namespace API.Controllers
         //    return NoContent();  // If successful, return 204 No Content
         //}
 
-        [HttpPost("delete")]
-        public async Task<IActionResult> DeleteCourse(GetCourseModel model)
-        {
-            var course = await _courseService.GetCourseByIdAsync(model.CourseId);
-
-            if (course == null)
-            {
-                return NotFound();
-            }
-
-            _context.Courses.Remove(course);
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
+        // [HttpPost("delete")]
+        // public async Task<IActionResult> DeleteCourse(GetCourseModel model)
+        // {
+        //     var course = await _courseService.GetCourseByIdAsync(model.CourseId);
+        //
+        //     if (course == null)
+        //     {
+        //         return NotFound();
+        //     }
+        //
+        //     _context.Courses.Remove(course);
+        //
+        //     await _context.SaveChangesAsync();
+        //
+        //     return NoContent();
+        // }
 
     }
 }

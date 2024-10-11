@@ -12,7 +12,7 @@ public class EnrollmentsConfiguration : IEntityTypeConfiguration<Enrollment>
         builder.Property(e => e.EnrollmentDate);
         builder.Property(e => e.ProgressPercentage).IsRequired(false).HasDefaultValue(0.0); 
         builder.Property(e => e.StudentId).IsRequired();
-        builder.Property(e => e.PaymentId).IsRequired();
+        // builder.Property(e => e.PaymentId).IsRequired();
         
        
       builder.HasKey(e => e.EnrollmentId);
@@ -32,11 +32,11 @@ public class EnrollmentsConfiguration : IEntityTypeConfiguration<Enrollment>
             .IsRequired();
 
            
-        builder.HasOne(e => e.Payment)
-            .WithMany(e => e.Enrollments)
-            .HasForeignKey(p => p.PaymentId)
-            .OnDelete(DeleteBehavior.NoAction)
-            .IsRequired();
+        // builder.HasOne(e => e.Payment)
+        //     .WithMany(e => e.Enrollments)
+        //     .HasForeignKey(p => p.PaymentId)
+        //     .OnDelete(DeleteBehavior.NoAction)
+        //     .IsRequired();
     }
 }
 
