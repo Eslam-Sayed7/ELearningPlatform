@@ -58,68 +58,93 @@ public class CourseService : ICourseService
         return CoursesBySpec;
     }
 
-    
 
-    //
-    // public async Task<Course> AddCourse(AddCourseModel model)
-    // {   
-    //         var NewCourse = new Course
-    //         {
-    //             CourseName = model.CourseName,
-    //             Description = model.Description,
-    //             CategoryId = model.CategoryId,
-    //             Level = model.Level,
-    //             Price = model.Price,
-    //             Duration = model.Duration,
-    //             ThumbnailUrl = model.ThumbnailUrl,
-    //             Language = model.Language,
-    //             CreatedAt = DateTime.UtcNow,
-    //             UpdatedAt = DateTime.UtcNow
-    //         };
-    //         IEnumerable<CourseSection> courseSections = new List<CourseSection>();
-    //         
-    //         foreach (var sectionModel in model.Sections)
-    //         {
-    //             sectionModel.SectionSequence = ++NewCourse.LastSectionSequence; // very important 
-    //             var courseSection = new CourseSection
-    //             {
-    //                 SectionId = Guid.NewGuid(),
-    //                 CourseId = NewCourse.CourseId,
-    //                 Title = sectionModel.Title,
-    //                 SectionSequence = sectionModel.SectionSequence
-    //             };
-    //             courseSections.Append(courseSection);
-    //             
-    //             foreach (var materialModel in sectionModel.Materials)
-    //             {
-    //                 var courseMaterial = new CourseMaterial
-    //                 {
-    //                     MaterialId = Guid.NewGuid(),
-    //                     SectionId = courseSection.SectionId,
-    //                     MaterialType = materialModel.MaterialType,
-    //                     TextContent = materialModel.TextContent,
-    //                     Url = materialModel.Url,
-    //                     MaterialSequence = sectionModel.last
-    //                 };
-    //                 courseSection.CourseMaterials.Add(courseMaterial);  // Attach materials to the section
-    //             }
-    //
-    //             _UnitOfWork.Repository<Course>().AddAsync(NewCourse);
-    //             _UnitOfWork.Repository<CourseSection>().AddAsync(courseSection);
-    //             NewCourse.CourseSections.Add(courseSection);  // Attach section to the course
-    //         }
-    //
-    //         await _UnitOfWork.Repository<Course>().AddAsync(NewCourse);
-    //
-    //         await _UnitOfWork.CompleteAsync();
-    //         return NewCourse;
-    // }
-    //
+
+    public async Task<Course> AddCourse(AddCourseModel model)
+    {
+        if (model == null)
+        {
+            throw new ArgumentNullException(nameof(model));
+        }
+
+        // Create a new Course entity from the model
+        var newCourse = new Course
+        {
+            CourseId = Guid.NewGuid(), // Assign a new Guid for the course
+            CourseName = model.CourseName,
+            Description = model.Description,
+            CategoryId = model.CategoryId, // Assuming you have a CategoryId field in your Course entity
+            Level = model.Level,
+            Price = model.Price,
+            Duration = model.Duration,
+            ThumbnailUrl = model.ThumbnailUrl,
+            Language = model.Language,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+
+        // Add course sections if provided
+        foreach (var sectionModel in model.Sections)
+        {
+            var courseSection = new CourseSection
+            {
+                SectionId = Guid.NewGuid(),
+                CourseId = newCourse.CourseId,
+                Title = sectionModel.Title,
+                SectionSequence = sectionModel.SectionSequence
+            };
+
+            newCourse.CourseSections.Add(courseSection);  // Attach section to the course
+
+            // Add section materials if provided
+            foreach (var materialModel in sectionModel.Materials)
+            {
+                var courseMaterial = new CourseMaterial
+                {
+                    MaterialId = Guid.NewGuid(),
+                    SectionId = courseSection.SectionId,
+                    MaterialType = materialModel.MaterialType,
+                    TextContent = materialModel.TextContent,
+                    Url = materialModel.Url,
+                    MaterialSequence = materialModel.MaterialSequence
+                };
+
+                courseSection.CourseMaterials.Add(courseMaterial);  // Attach materials to the section
+            }
+        }
+
+        // Add the course to the repository
+        await _UnitOfWork.Repository<Course>().AddAsync(newCourse);
+
+        // Commit all changes
+        await _UnitOfWork.CompleteAsync();
+
+        return newCourse;
+    }
+    public async Task<bool> DeleteCourseAsync(string id)
+    {
+        // Retrieve the course entity from the database
+        var course = await _UnitOfWork.Repository<Course>().FindAsync(c => c.CourseId == new Guid(id));
+        var courseEntity = course.FirstOrDefault();
+        
+        if (courseEntity == null)
+        {
+            return false; // Course not found
+        }
+
+        // Remove the course
+        await _UnitOfWork.Repository<Course>().DeleteAsync(courseEntity);
+        
+        // Commit the changes to the database
+        await _UnitOfWork.CompleteAsync();
+
+        return true; // Return true to indicate successful deletion
+    }
     // public async Task<> AddSection()
     // {
     //     
     // }
     //
     // public async 
-    
+
 }

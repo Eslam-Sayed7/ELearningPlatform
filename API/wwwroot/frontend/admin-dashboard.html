@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instructor Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../assets/style/all.css">
     <link rel="stylesheet" href="css/admin-dashboard.css">
+    <!-- <link rel="stylesheet" href="../assets/style/all.css"> -->
 
 </head>
 <body>
@@ -97,60 +97,31 @@
                 </div>
             </div>
         </div>
-
-        <!-- Users Section -->
-        <h2>User Managment</h2>
-        <div class="user-manager">
-            <div class="search-bar-f">
-                <input type="text" id="searchInput" placeholder="Search users by name or ID..." onkeyup="searchUsers()">
-            </div>
-                        <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Date Created</th>
-                        <th>Role</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="userTableBody">
-                    <!-- User rows will go here -->
-                    <tr>
-                        <td>1</td>
-                        <td><img src="user1.jpg" class="user-image" alt="User 1"></td>
-                        <td>Andrew Mike</td>
-                        <td>andrew@gmal.com</td>
-                        <td>04/10/2014</td>
-                        <td>Admin</td>
-                        <td class="status status-active"><span></span>Active</td>
-                        <td class="action-buttons">
-                            <button class="edit-btn">Edit</button>
-                            <button class="delete-btn">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><img src="user2.jpg" class="user-image" alt="User 2"></td>
-                        <td>John Doe</td>
-                        <td>John@gmal.com</td>
-                        <td>06/09/2015</td>
-                        <td>Publisher</td>
-                        <td class="status status-active"><span></span>Active</td>
-                        <td class="action-buttons">
-                            <button class="delete-btn">Delete</button>
-                        </td>
-                    </tr>
-                    <!-- Add more rows dynamically as needed -->
-                </tbody>
-            </table>
+<!-- Users Section -->
+<h2>User Management</h2>
+<div class="user-manager">
+    <div class="search-bar-f">
+        <input type="text" id="searchInput" placeholder="Search users by name or Email..." onkeyup="searchUsers()">
+    </div>
     
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Date Created</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+            <!-- User rows will go here -->
+        </tbody>
+    </table>
+</div>
 
-
-        <!-- Courses Section -->
         <h2>Course Managment</h2>
          <div class="course-manager">
         <!-- Buttons for adding/removing courses -->
@@ -197,9 +168,6 @@
                                 <label for="courseLanguage">Language:</label>
                                 <input type="text" id="courseLanguage" name="courseLanguage" required>
                         
-                                <!-- Tags (optional) -->
-                                <label for="courseTags">Tags (comma-separated):</label>
-                                <input type="text" id="courseTags" name="courseTags">
                         
                                 <button type="submit">Submit</button>
                             </form>
@@ -224,6 +192,7 @@
     </div>
 
     <script src="js/manage-courses.js"></script>
+    <script src="js/manage-users.js"></script>
     <script src="js/admin-dashboard.js"></script>
 </body>
 </html>

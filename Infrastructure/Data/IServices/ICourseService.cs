@@ -14,7 +14,10 @@ public interface ICourseService
 
     Task<IEnumerable<Course>> GetCoursesByCategory(ISpecification<Course> spec);
 
-    // Task<Course> AddCourse(AddCourseModel model);
-    
+    Task<Course> AddCourse(AddCourseModel model);
+
+    Task<bool> DeleteCourseAsync(string id); 
+
+
 }
 
