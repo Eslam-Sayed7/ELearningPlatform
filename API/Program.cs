@@ -13,11 +13,13 @@ using Infrastructure.Data.IServices;
 using Infrastructure.Data.Services;
 using Infrastructure.Services.Enrollservice;
 using Infrastructure.Base;
+using DotNetEnv;
 
 // using Infrastructure.Services.Pay;
 //using Infrastructure.Services.Pay;
 
 var builder = WebApplication.CreateBuilder(args);
+Env.Load();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -25,10 +27,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 
 builder.Services.AddDbContext<AppDbContext>(x =>
-    x.UseSqlite(builder.Configuration.GetConnectionString("constr")));
-
-builder.Services.AddDbContext<AppDbContext>(x =>
-    x.UseSqlite(builder.Configuration.GetConnectionString("constr")));
+    x.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
 // builder.Services.AddIdentityServices();
 builder.Services.AddHttpContextAccessor();
@@ -43,7 +42,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEnrollmentService,EnrollmentServices>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddTransient<ICourseService, CourseService>();
 //builder.Services.AddScoped<IPaymentService,PaymentService>();
 
 builder.Services.AddAuthentication(options =>

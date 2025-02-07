@@ -5,6 +5,7 @@ using Core.Entities.Configuration;
 using Infrastructure.Config;
 using Infrastructure.Configs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using ProgressConfiguration = Core.Entities.Configuration.ProgressConfiguration;
 
 namespace Infrastructure.Data;
@@ -30,9 +31,18 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
     // public virtual DbSet<TextContent> TextContents { get; set; }
     // public virtual DbSet<VideoContent> VideoContents { get; set; }
 
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //     => optionsBuilder.UseSqlite("Data Source=../ELearningPlatform.db");
+    //
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // => optionsBuilder.UseSqlServer("Server=localhost;Database=ElearningPlatform;User Id=sa;Password=zb?V?o/3?hUg?!Y@p7;TrustServerCertificate=True;");
+    //
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlite("Data Source=../ELearningPlatform.db");
-
+    {
+        optionsBuilder
+            .UseNpgsql("Host=localhost;Port=5442;Database=LMSplatform;Username=postgres;Password=66c#Abi^Xqjj;Pooling=true;MaxPoolSize=200;Timeout=200;KeepAlive=300;")
+            .LogTo(Console.WriteLine, LogLevel.Information);
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
@@ -55,9 +65,9 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
 
          // Seed Roles
          modelBuilder.Entity<IdentityRole>().HasData(
-             new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
-             new IdentityRole { Name = "Instructor", NormalizedName = "Instructor" },
-             new IdentityRole { Name = "Student", NormalizedName = "STUDENT" }
+             new IdentityRole { Id = "1" , Name = "Admin", NormalizedName = "ADMIN" },
+             new IdentityRole { Id = "2", Name = "Instructor", NormalizedName = "Instructor" },
+             new IdentityRole { Id = "3" , Name = "Student", NormalizedName = "STUDENT" }
          );
        
         OnModelCreatingPartial(modelBuilder);

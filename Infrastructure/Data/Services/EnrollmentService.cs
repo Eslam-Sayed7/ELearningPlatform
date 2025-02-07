@@ -1,26 +1,42 @@
 using Core.Entities;
 using Infrastructure.Base;
 using Core.Enums;
+using Infrastructure.Data;
 using Infrastructure.Data.Services;
 using Infrastructure.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.Enrollservice
 {
     public class EnrollmentServices : IEnrollmentService 
     {  
         private readonly IUnitOfWork _unitOfWork;
-        public EnrollmentServices(IUnitOfWork unitOfWork)
+        private readonly AppDbContext _context;
+        public EnrollmentServices(IUnitOfWork unitOfWork , AppDbContext context) 
         {
             _unitOfWork  = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _context = context;
         }
         
        
         public async Task<EnrollmentDto> EnrollInCourse(Guid studentId , Guid courseId , double discount = 0)
         {
-            var student =
-            (await _unitOfWork.Repository<Student>()
-                .FindAsync(s => s.Id == studentId)).FirstOrDefault();
+            // var student =
+            // (await _unitOfWork.Repository<Student>()
+            //     .FindAsync(s => s.Id.ToString() == studentId.ToString())).FirstOrDefault();
+            
+            var course = (await _unitOfWork.Repository<Course>()
+                    .FindAsync(c => c.CourseId.ToString() == courseId.ToString())).FirstOrDefault();
+            if (course == null)
+                return new EnrollmentDto()
+                {
+                    Message = $"This course Is not found",
+                    IsEnrolled = false
+                };
 
+            // var student = await _context.Students.Where(x => x.Id.ToString() == studentId.ToString()).FirstOrDefaultAsync();
+            var student = (await _unitOfWork.Repository<Student>()
+                .FindAsync(c => c.Id == studentId)).FirstOrDefault();
             if (student == null)
             {
                 return new EnrollmentDto()
@@ -30,14 +46,6 @@ namespace Infrastructure.Services.Enrollservice
                 };
             }
 
-            var course = (await _unitOfWork.Repository<Course>()
-                    .FindAsync(c => c.CourseId == courseId)).FirstOrDefault();
-            if (course == null)
-                return new EnrollmentDto()
-                {
-                    Message = $"This course Is not found",
-                    IsEnrolled = false
-                };
 
             var existingEnrollment = await CheckEnrollmentStatusAsync(studentId, courseId);
             
@@ -50,7 +58,7 @@ namespace Infrastructure.Services.Enrollservice
 
             _unitOfWork.BeginTransactionAsync();
             
-            double amount = course.Price;
+            // double amount = course.Price;
             
             // TODO NOT COMPLETE FEATURE
             // PaymentService paymentService = new PaymentService(_unitOfWork);

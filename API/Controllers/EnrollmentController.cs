@@ -15,7 +15,12 @@ namespace API.Controllers
     {   
         private readonly IEnrollmentService _enrollService;
         
-        [Authorize]
+        public EnrollmentController(IEnrollmentService enrollService)
+        {
+            _enrollService = enrollService;
+        }
+        
+        // [Authorize]
         [HttpPost("Enroll")]
         public async Task<ActionResult<EnrollmentDto>> EnrollInCourse([FromBody] EnrollmentRequestDto request)
         {

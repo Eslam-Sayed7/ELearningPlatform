@@ -15,7 +15,7 @@
 //         builder.Property(e => e.SectionId).HasColumnName("SectionID");
 //         builder.Property(e => e.MaterialType).HasConversion<int>()  // Ensures enum is stored as integer
 //             .HasColumnType("INT");
-//         builder.Property(e => e.TextContent).HasColumnType("NVARCHAR(255)");
+//         builder.Property(e => e.TextContent).HasColumnType("text");
 //         builder.Property(e => e.Url).HasColumnName("Url");
 //         builder.Property(e => e.MaterialSequence).HasConversion<int>();
 //         

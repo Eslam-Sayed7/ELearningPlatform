@@ -38,7 +38,7 @@ public class CourseService : ICourseService
 
     }
 
-    public async Task<GetCourseDto> GetCourseByIdAsync(Guid Id)
+    public async Task<Course> GetCourseByIdAsync(Guid Id)
     {
         var searchcourse = await _UnitOfWork.Repository<Course>()
             .FindAsync(c => c.CourseId.ToString().ToUpper() == Id.ToString().ToUpper() , 
@@ -46,20 +46,21 @@ public class CourseService : ICourseService
                     .Include(c => c.Category));
         
         var course = searchcourse.FirstOrDefault();
-        var instructorName = $"{course.Instructors.FirstOrDefault().Appuser.FirstName }{course.Instructors.FirstOrDefault().Appuser.LastName}";
-        return new GetCourseDto()
-        {
-            CourseId = course.CourseId,
-            CourseName = course.CourseName,
-            Description = course.Description,
-            Instructor = instructorName ,
-            Level = course.Level,
-            CategoryName = course.Category.CategoryName,
-            ThumbnailUrl = course.ThumbnailUrl,
-            Price = course.Price,
-            Duration = course.Duration,
-            Language = course.Language
-        };
+        
+        // return new GetCourseDto()
+        // {
+        //     CourseId = course.CourseId,
+        //     CourseName = course.CourseName,
+        //     Description = course.Description,
+        //     Instructor = instructorName ,
+        //     Level = course.Level,
+        //     CategoryName = course.Category.CategoryName,
+        //     ThumbnailUrl = course.ThumbnailUrl,
+        //     Price = course.Price,
+        //     Duration = course.Duration,
+        //     Language = course.Language
+        // };
+        return course;
     }
 
     public async Task<IList<CourseCardDto>> GetPopularCoursesPaged()
@@ -111,31 +112,31 @@ public class CourseService : ICourseService
             CourseId = Guid.NewGuid(), // Assign a new Guid for the course
             CourseName = model.CourseName,
             Description = model.Description,
-            CategoryId = model.CategoryId, // Assuming you have a CategoryId field in your Course entity
+            // CategoryId = model.CategoryId, // Assuming you have a CategoryId field in your Course entity
             Level = model.Level,
             Price = model.Price,
             Duration = model.Duration,
             ThumbnailUrl = model.ThumbnailUrl,
             Language = model.Language,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         // Add course sections if provided
-        foreach (var sectionModel in model.Sections)
-        {
-            var courseSection = new CourseSection
-            {
-                SectionId = Guid.NewGuid(),
-                CourseId = newCourse.CourseId,
-                Title = sectionModel.Title,
-                SectionSequence = sectionModel.SectionSequence
-            };
-
-            newCourse.CourseSections.Add(courseSection);  // Attach section to the course
-
-           
-        }
+        // foreach (var sectionModel in model.Sections)
+        // {
+        //     var courseSection = new CourseSection
+        //     {
+        //         SectionId = Guid.NewGuid(),
+        //         CourseId = newCourse.CourseId,
+        //         Title = sectionModel.Title,
+        //         SectionSequence = sectionModel.SectionSequence
+        //     };
+        //
+        //     newCourse.CourseSections.Add(courseSection);  // Attach section to the course
+        //
+        //    
+        // }
 
         // Add the course to the repository
         await _UnitOfWork.Repository<Course>().AddAsync(newCourse);
