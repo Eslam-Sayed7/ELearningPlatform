@@ -5,98 +5,103 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Infrastructure.Identity.migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241010200554_Update_Coures_Material_and_progr")]
-    partial class Update_Coures_Material_and_progr
+    [Migration("20250130080023_Initial-Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Core.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ProfilePicture")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("RefreshToken")
                         .HasMaxLength(255)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -114,17 +119,17 @@ namespace Infrastructure.Identity.migrations
                 {
                     b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("ParentCategoryId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.HasKey("CategoryId");
 
@@ -137,53 +142,53 @@ namespace Infrastructure.Identity.migrations
                 {
                     b.Property<Guid>("CourseId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uuid")
                         .HasColumnName("CourseID");
 
                     b.Property<Guid?>("CategoryId")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uuid")
                         .HasColumnName("CategoryID");
 
                     b.Property<string>("CourseName")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(255)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("DATETIME")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp")
+                        .HasDefaultValueSql("NOW()");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<int>("Duration")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Language")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(100)");
+                        .HasColumnType("text");
 
                     b.Property<int>("LastSectionSequence")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Level")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("text");
 
                     b.Property<double>("Price")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("DOUBLE(10,2)")
+                        .HasColumnType("decimal(10,2)")
                         .HasDefaultValueSql("0.00");
 
                     b.Property<string>("ThumbnailUrl")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(255)")
+                        .HasColumnType("text")
                         .HasColumnName("ThumbnailURL");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("DATETIME")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp")
+                        .HasDefaultValueSql("NOW()");
 
                     b.HasKey("CourseId");
 
@@ -192,59 +197,20 @@ namespace Infrastructure.Identity.migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("Core.Entities.CourseMaterial", b =>
-                {
-                    b.Property<Guid>("MaterialId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("MaterialID");
-
-                    b.Property<Guid?>("CourseId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("MaterialSequence")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaterialType")
-                        .HasColumnType("INT");
-
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("SectionID");
-
-                    b.Property<string>("TextContent")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR(255)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("Url");
-
-                    b.HasKey("MaterialId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("SectionId");
-
-                    b.ToTable("CourseMaterials", (string)null);
-                });
-
             modelBuilder.Entity("Core.Entities.CourseSection", b =>
                 {
                     b.Property<Guid>("SectionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uuid")
                         .HasColumnName("SectionId");
 
                     b.Property<Guid>("CourseId")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uuid")
                         .HasColumnName("CourseID");
 
-                    b.Property<int>("LastMaterialSequence")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INT")
-                        .HasDefaultValue(0);
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("SectionSequence")
                         .ValueGeneratedOnAdd()
@@ -252,7 +218,7 @@ namespace Infrastructure.Identity.migrations
                         .HasDefaultValue(0);
 
                     b.Property<string>("Title")
-                        .HasColumnType("NVARCHAR(255)");
+                        .HasColumnType("text");
 
                     b.HasKey("SectionId");
 
@@ -265,30 +231,25 @@ namespace Infrastructure.Identity.migrations
                 {
                     b.Property<Guid>("EnrollmentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CourseId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("EnrollmentDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("PaymentId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<double?>("ProgressPercentage")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("REAL")
+                        .HasColumnType("double precision")
                         .HasDefaultValue(0.0);
 
                     b.Property<Guid>("StudentId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.HasKey("EnrollmentId");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("PaymentId");
 
                     b.HasIndex("StudentId");
 
@@ -299,21 +260,21 @@ namespace Infrastructure.Identity.migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Bio")
                         .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("Expertise")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -325,79 +286,38 @@ namespace Infrastructure.Identity.migrations
 
             modelBuilder.Entity("Core.Entities.InstructorsToCourse", b =>
                 {
-                    b.Property<Guid>("InstructorToCourseId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                    b.Property<Guid>("InstructorId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CourseId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
-                    b.Property<Guid>("InstructorId")
-                        .HasColumnType("TEXT");
+                    b.Property<Guid>("InstructorToCourseId")
+                        .HasColumnType("uuid");
 
-                    b.HasKey("InstructorToCourseId");
+                    b.HasKey("InstructorId", "CourseId");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("InstructorId");
 
                     b.ToTable("InstructorsToCourse");
                 });
 
-            modelBuilder.Entity("Core.Entities.Payment", b =>
-                {
-                    b.Property<Guid>("PaymentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("Amount")
-                        .HasMaxLength(50)
-                        .HasColumnType("REAL");
-
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double?>("Discount")
-                        .HasColumnType("REAL");
-
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("TransactionDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("paymentStatus")
-                        .HasMaxLength(50)
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("PaymentId");
-
-                    b.ToTable("Payment");
-                });
-
             modelBuilder.Entity("Core.Entities.Progress", b =>
                 {
-                    b.Property<int>("ProgressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.Property<Guid>("EnrollmentId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SectionId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsCompleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<Guid>("MaterialId")
-                        .HasColumnType("TEXT");
+                    b.HasKey("EnrollmentId", "SectionId");
 
-                    b.HasKey("ProgressId");
-
-                    b.HasIndex("EnrollmentId")
-                        .IsUnique();
-
-                    b.HasIndex("MaterialId");
+                    b.HasIndex("SectionId");
 
                     b.ToTable("Progresses", (string)null);
                 });
@@ -406,11 +326,11 @@ namespace Infrastructure.Identity.migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -423,19 +343,19 @@ namespace Infrastructure.Identity.migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -448,19 +368,19 @@ namespace Infrastructure.Identity.migrations
                     b.HasData(
                         new
                         {
-                            Id = "4c7ae234-a320-416f-b983-0a295ce5f2a4",
+                            Id = "1",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "cf135e10-4bbc-4a65-88bc-9f3705659d3e",
+                            Id = "2",
                             Name = "Instructor",
                             NormalizedName = "Instructor"
                         },
                         new
                         {
-                            Id = "1a2a5fa4-37bd-440a-b592-f0bb8aeb4f72",
+                            Id = "3",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
@@ -470,17 +390,19 @@ namespace Infrastructure.Identity.migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -493,17 +415,19 @@ namespace Infrastructure.Identity.migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -515,17 +439,17 @@ namespace Infrastructure.Identity.migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -537,10 +461,10 @@ namespace Infrastructure.Identity.migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -552,16 +476,16 @@ namespace Infrastructure.Identity.migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -587,21 +511,6 @@ namespace Infrastructure.Identity.migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Core.Entities.CourseMaterial", b =>
-                {
-                    b.HasOne("Core.Entities.Course", null)
-                        .WithMany("CourseMaterials")
-                        .HasForeignKey("CourseId");
-
-                    b.HasOne("Core.Entities.CourseSection", "Section")
-                        .WithMany("CourseMaterials")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Section");
-                });
-
             modelBuilder.Entity("Core.Entities.CourseSection", b =>
                 {
                     b.HasOne("Core.Entities.Course", "Course")
@@ -621,12 +530,6 @@ namespace Infrastructure.Identity.migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Payment", "Payment")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("Core.Entities.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
@@ -634,8 +537,6 @@ namespace Infrastructure.Identity.migrations
                         .IsRequired();
 
                     b.Navigation("Course");
-
-                    b.Navigation("Payment");
 
                     b.Navigation("Student");
                 });
@@ -669,20 +570,20 @@ namespace Infrastructure.Identity.migrations
             modelBuilder.Entity("Core.Entities.Progress", b =>
                 {
                     b.HasOne("Core.Entities.Enrollment", "Enrollment")
-                        .WithOne("Progress")
-                        .HasForeignKey("Core.Entities.Progress", "EnrollmentId")
+                        .WithMany("Progresses")
+                        .HasForeignKey("EnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.CourseMaterial", "Material")
+                    b.HasOne("Core.Entities.CourseSection", "Section")
                         .WithMany()
-                        .HasForeignKey("MaterialId")
+                        .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Enrollment");
 
-                    b.Navigation("Material");
+                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("Core.Entities.Student", b =>
@@ -756,8 +657,6 @@ namespace Infrastructure.Identity.migrations
 
             modelBuilder.Entity("Core.Entities.Course", b =>
                 {
-                    b.Navigation("CourseMaterials");
-
                     b.Navigation("CourseSections");
 
                     b.Navigation("Enrollments");
@@ -765,25 +664,14 @@ namespace Infrastructure.Identity.migrations
                     b.Navigation("InstructorsToCourses");
                 });
 
-            modelBuilder.Entity("Core.Entities.CourseSection", b =>
-                {
-                    b.Navigation("CourseMaterials");
-                });
-
             modelBuilder.Entity("Core.Entities.Enrollment", b =>
                 {
-                    b.Navigation("Progress")
-                        .IsRequired();
+                    b.Navigation("Progresses");
                 });
 
             modelBuilder.Entity("Core.Entities.Instructor", b =>
                 {
                     b.Navigation("InstructorsToCourses");
-                });
-
-            modelBuilder.Entity("Core.Entities.Payment", b =>
-                {
-                    b.Navigation("Enrollments");
                 });
 
             modelBuilder.Entity("Core.Entities.Student", b =>

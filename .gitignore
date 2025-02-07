@@ -20,5 +20,5 @@ obj/
 *.bak
 *.tmp
 
-
 .fake
+.env

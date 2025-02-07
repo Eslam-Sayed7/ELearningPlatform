@@ -10,7 +10,7 @@ public interface ICourseService
 {
     Task<CourseCardDto> GetCourseCardByIdAsync(Guid Id);
 
-    Task<GetCourseDto> GetCourseByIdAsync(Guid Id);
+    Task<Course> GetCourseByIdAsync(Guid Id);
 
     Task<IList<CourseCardDto>> GetPopularCoursesPaged();
 

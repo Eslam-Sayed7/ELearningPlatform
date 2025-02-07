@@ -10,9 +10,9 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
         // Property Configurations
         builder.Property(u => u.FirstName).HasMaxLength(50);
         builder.Property(u => u.LastName).HasMaxLength(50);
-        builder.Property(u => u.CreatedAt).HasColumnType("datetime2").IsRequired();
-        builder.Property(u => u.UpdatedAt).HasColumnType("datetime2").IsRequired();
-        builder.Property(u => u.RefreshToken).HasMaxLength(255).IsRequired(false);
+        builder.Property(u => u.CreatedAt).HasColumnType("timestamp").IsRequired();
+        builder.Property(u => u.UpdatedAt).HasColumnType("timestamp").IsRequired();
+        builder.Property(u => u.RefreshToken).HasColumnType("text").IsRequired(false);
     }
             
 }
