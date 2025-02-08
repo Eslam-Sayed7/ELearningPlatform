@@ -13,6 +13,10 @@ using Infrastructure.Dtos;
 using Infrastructure.Data.IServices;
 using Infrastructure.Base;
 using Infrastructure.Data.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.WebEncoders.Testing;
+using Serilog;
+using Serilog.Core;
 
 namespace Infrastructure.Services.Auth
 {   
@@ -22,22 +26,18 @@ namespace Infrastructure.Services.Auth
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JWT _jwt;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        
+        private readonly Logger _logger;
         public AuthService(UserManager<AppUser> userManager, IOptions<JWT> jwt ,
-         RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor , IUnitOfWork unitOfWork) 
+         RoleManager<IdentityRole> roleManager  , IUnitOfWork unitOfWork) 
         {
             _userManager = userManager;
             _jwt = jwt.Value;
             _roleManager = roleManager;
-            _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
-
+            _logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateLogger();
         }
-
-        
-        
-        
 
         public async Task<AuthModel> RegisterUserAsync(RegisterModel model)
         {
@@ -157,12 +157,14 @@ namespace Infrastructure.Services.Auth
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.Role, roles.ToString()),
                 new Claim("uid", user.Id)
             }
             .Union(userClaims)
             .Union(roleClaims);
 
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
+            _logger.Information("Key: {0}", Encoding.UTF8.GetBytes(_jwt.Key)); 
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
             var jwtSecurityToken = new JwtSecurityToken(
@@ -174,7 +176,63 @@ namespace Infrastructure.Services.Auth
 
             return jwtSecurityToken;
         }
+        private async Task<bool> AuthenticatedUser(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_jwt.Key);
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = _jwt.Issuer,
+                    ValidAudience = _jwt.Audience,
+                    ValidateLifetime = true
+                }, out SecurityToken validatedToken);
+                
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        
+        // used when the token is expired and want to refresh it
+        private async Task<ClaimsPrincipal> GetPrincipalFromExpiredToken(string token)
+        {
+            var SecKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
+            if (Encoding.UTF8.GetByteCount(_jwt.Key) >= 16)
+            {
+                SecKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
+            }
+            else
+            {
+                var keyBytes = Encoding.UTF8.GetBytes(_jwt.Key);
+                Array.Resize(ref keyBytes, 16);
+                SecKey = new SymmetricSecurityKey(keyBytes);    
+            }
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = SecKey,
+                ValidateLifetime = false
+            };
 
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
+
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+
+            return principal;
+        }
         public async Task<UserRoleDto> GetRoleAsync(GetRoleModel model)
         {
             

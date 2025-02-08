@@ -29,7 +29,6 @@ builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 builder.Services.AddDbContext<AppDbContext>(x =>
     x.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
-// builder.Services.AddIdentityServices();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddIdentity<AppUser , IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -67,7 +66,9 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Student", policy => policy.RequireRole("Student"));
+    options.AddPolicy("Instructor", policy => policy.RequireRole("Instructor"));
 });
 
 // builder.Services.AddIdentityServices();
@@ -87,13 +88,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseDefaultFiles();
-
-// app.UseEndpoints(endpoints =>
-// {
-//     endpoints.MapControllers();
-// });
-
-
 
 app.UseAuthentication();  
 app.UseAuthorization();

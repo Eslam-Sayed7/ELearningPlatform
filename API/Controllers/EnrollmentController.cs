@@ -20,7 +20,7 @@ namespace API.Controllers
             _enrollService = enrollService;
         }
         
-        // [Authorize]
+        [Authorize("Student , Admin")]
         [HttpPost("Enroll")]
         public async Task<ActionResult<EnrollmentDto>> EnrollInCourse([FromBody] EnrollmentRequestDto request)
         {
@@ -28,7 +28,7 @@ namespace API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var enrollmentResult = await _enrollService.EnrollInCourse(request.CourseId, request.StudentId);
+            var enrollmentResult = await _enrollService.EnrollInCourse(request.StudentId , request.CourseId);
             EnrollmentDto enroll = new EnrollmentDto
             {
                 Message = enrollmentResult.Message
@@ -36,6 +36,7 @@ namespace API.Controllers
             return Ok(enroll);
         }
 
+        [Authorize("Student , Admin")]
         [HttpPost("CheckEnroll")]
         public async Task<ActionResult<Enrollment>> GetEnrollment([FromBody] CheckEnrollmentModel request)
         {
