@@ -33,6 +33,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddIdentity<AppUser , IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<AppDbContext>()
+    .AddRoles<IdentityRole>()
     .AddApiEndpoints();
 
 builder.Services.AddScoped<IAuthService , AuthService>();
@@ -66,7 +67,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin")); 
     options.AddPolicy("Student", policy => policy.RequireRole("Student"));
     options.AddPolicy("Instructor", policy => policy.RequireRole("Instructor"));
 });

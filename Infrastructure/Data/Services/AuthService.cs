@@ -93,7 +93,7 @@ namespace Infrastructure.Services.Auth
                 User = user,
                 Email = user.Email,
                 IsAuthenticated = true,
-                Roles = new List<string> { "User" },
+                Roles = new List<string> { "Student" },
                 Username = user.UserName
             };
         }
@@ -140,8 +140,17 @@ namespace Infrastructure.Services.Auth
 
             var result = await _userManager.AddToRoleAsync(user, model.Role);
 
-            return result.Succeeded ? string.Empty : "Something went wrong";
-        }
+            if (!result.Succeeded)
+                return "Something went wrong while adding role";
+
+            var jwtSecurityToken = await CreateJwtToken(user);
+            user.RefreshToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            user.RefreshTokenExpiryTime = jwtSecurityToken.ValidTo;
+
+            await _userManager.UpdateAsync(user);
+
+            return "Role added successfully";
+        } 
 
         private async Task<JwtSecurityToken> CreateJwtToken(AppUser user)
         {
@@ -157,14 +166,13 @@ namespace Infrastructure.Services.Auth
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(ClaimTypes.Role, roles.ToString()),
                 new Claim("uid", user.Id)
             }
             .Union(userClaims)
             .Union(roleClaims);
 
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
-            _logger.Information("Key: {0}", Encoding.UTF8.GetBytes(_jwt.Key)); 
+            // _logger.Information("Key: {0}", Encoding.UTF8.GetBytes(_jwt.Key)); 
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
             var jwtSecurityToken = new JwtSecurityToken(
