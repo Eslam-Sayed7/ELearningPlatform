@@ -35,6 +35,7 @@ namespace API.Controllers
         // }
         
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model)
         {
@@ -53,7 +54,8 @@ namespace API.Controllers
             var addingStudent = await _studentService.CreateStudentAsync(student);
             return Ok(result);
         }
-
+        
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> GetTokenAsync([FromBody] TokenRequestModel model)
         {
@@ -77,7 +79,7 @@ namespace API.Controllers
             
             return Ok(res);
         }
-
+        [Authorize(Roles = "Admin")] 
         [HttpPost("AddRole")]
         public async Task<IActionResult> AddRoleAsync([FromBody] AddRoleModel model)
         {
@@ -93,11 +95,16 @@ namespace API.Controllers
         }
             
         
-        // [Authorize]
+        [Authorize(Roles = "Admin , Instructor , Student")]
         [HttpPost("GetRole")]
         public async Task<ActionResult<UserRoleDto>> GetRoleAsync([FromBody] GetRoleModel model)
         {
+            
             var result = await _authService.GetRoleAsync(model);
+            if (result.Roles.Count == 0)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
         
