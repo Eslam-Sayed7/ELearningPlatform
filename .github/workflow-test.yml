@@ -1,9 +1,6 @@
 name: test-after-merge
 
-on:
-  push:
-    branches:
-      - master  # Runs only when something is merged into master
+on:push
 
 jobs:
   build_and_test:
