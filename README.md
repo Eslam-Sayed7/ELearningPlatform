@@ -20,7 +20,7 @@ The **E-Learn Platform** is a comprehensive e-learning system built with .NET, d
   Deliver course materials (videos, PDFs, etc.) to students in a structured way.
 
 - **Interactive Assessments**  
-  Supports quizzes, tests, and assignments to evaluate student progress.
+  Supports quizzes and tests to evaluate student progress.
 
 ## Technologies Used
 
