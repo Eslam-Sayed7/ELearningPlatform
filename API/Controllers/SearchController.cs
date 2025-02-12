@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
@@ -17,7 +18,7 @@ namespace API.Controllers
             _context = context;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("Search")]
         public async Task<ActionResult<IEnumerable<Course>>> SearchCourses([FromQuery] string query)
         {
@@ -32,7 +33,8 @@ namespace API.Controllers
 
             return Ok(courses);
         }
-
+        
+        [AllowAnonymous]
         [HttpGet("SearchWithFiltering")]
         public async Task<ActionResult<IEnumerable<Course>>> SearchCoursesWithFiltering(
         [FromQuery] string query,

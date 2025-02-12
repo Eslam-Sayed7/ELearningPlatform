@@ -25,16 +25,6 @@ namespace API.Controllers
             _studentService = studentService;
         }
 
-        // do not need it for now [do not delete it please]
-        
-        // [Authorize]
-        // [HttpGet]
-        // public async Task<ActionResult<LoginResponseDto>> GetCurrentUserRole()
-        // {
-        //     return await _authService.GetCurrentUser();
-        // }
-        
-
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model)
