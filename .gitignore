@@ -23,3 +23,9 @@ Logs/
 
 .fake
 .env
+
+# ignore appsettings till adjusting local vars parsing
+appsettings*.json
+# ignore docker files
+Dockerfile
+.dockerignore
