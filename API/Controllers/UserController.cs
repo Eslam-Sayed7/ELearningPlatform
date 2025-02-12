@@ -18,7 +18,7 @@ namespace API.Controllers
             _context = context;
         }
 
-        //[Authorize(Roles ="Admin")]
+        [Authorize(Roles ="Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
@@ -27,7 +27,7 @@ namespace API.Controllers
             return Ok(users);
         }
 
-        //[Authorize(Roles = "Admin)]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserByID(string id)
         {
@@ -49,6 +49,7 @@ namespace API.Controllers
             return Ok(userDto);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {

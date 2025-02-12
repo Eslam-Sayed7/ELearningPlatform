@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Infrastructure.Data.IServices;
 using Infrastructure.Data.Models;
 using Infrastructure.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace API.Controllers
             _courseService = courseService;
         }
 
+        [AllowAnonymous]
         [HttpGet("GetCourse")]
         public async Task<ActionResult<GetCourseDto>> GetCourseById(Guid courseid)  
         {
@@ -45,6 +47,7 @@ namespace API.Controllers
         }
 
         
+        [AllowAnonymous]
         [HttpGet("Popular")]
         public async Task<ActionResult<IEnumerable<CourseCardDto>>> GetCoursesPagse()
         {
@@ -52,7 +55,8 @@ namespace API.Controllers
 
             return Ok(courses);
         }
-        
+       
+        [AllowAnonymous]
         [HttpPost("CoursesByCategory")]
         public async Task<ActionResult<IList<CourseCardDto>>> GetCoursesByCategory(
             [FromBody] FilterByCategoryRequest request)
@@ -91,7 +95,7 @@ namespace API.Controllers
             return false;
         }
 
-
+        [Authorize(Roles = "Admin , Instructor , Student")]
         [HttpPost("Upload")]
         public async Task<IActionResult> Upload(IFormFile file)
         {
@@ -105,7 +109,8 @@ namespace API.Controllers
 
             return Ok(new { url = fileUrl });
         }
-
+        
+        [Authorize(Roles = "Admin , Instructor")]
         [HttpPost("AddCourse")]
         public async Task<ActionResult<Course>> AddCourse([FromBody] AddCourseModel request)
         {
