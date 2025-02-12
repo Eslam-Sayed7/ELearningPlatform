@@ -14,7 +14,7 @@ using Infrastructure.Data.Services;
 using Infrastructure.Services.Enrollservice;
 using Infrastructure.Base;
 using DotNetEnv;
-
+using Serilog;
 // using Infrastructure.Services.Pay;
 //using Infrastructure.Services.Pay;
 
@@ -25,6 +25,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
+builder.ConfigureLogging();
 
 builder.Services.AddDbContext<AppDbContext>(x =>
     x.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
@@ -87,13 +88,14 @@ if (app.Environment.IsDevelopment())
 // app.ApplyMigrations();
 
 app.UseHttpsRedirection();
+// app.UseSerilogRequestLogging();
 app.UseStaticFiles();
 app.UseDefaultFiles();
 
 app.UseAuthentication();  
 app.UseAuthorization();
 
-app.MapControllers();  // Assuming Identity API routing is handled within controllers
+app.MapControllers();
 
 app.Run();
 

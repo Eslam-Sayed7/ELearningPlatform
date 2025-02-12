@@ -16,6 +16,7 @@ obj/
 
 # Ignore logs, lock files, and backup files
 *.log
+Logs/
 *.lock
 *.bak
 *.tmp

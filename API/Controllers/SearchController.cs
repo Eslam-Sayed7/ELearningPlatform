@@ -12,9 +12,10 @@ namespace API.Controllers
     public class SearchController : Controller
     {
         private readonly AppDbContext _context;
-
-        public SearchController(AppDbContext context)
+        private readonly ILogger<SearchController> _logger;
+        public SearchController(AppDbContext context , ILogger<SearchController> logger)
         {
+            _logger = logger; 
             _context = context;
         }
 
@@ -22,15 +23,18 @@ namespace API.Controllers
         [HttpGet("Search")]
         public async Task<ActionResult<IEnumerable<Course>>> SearchCourses([FromQuery] string query)
         {
+            _logger.LogInformation("Searching for courses with query: {query}", query);
             if (string.IsNullOrWhiteSpace(query))
             {
                 return BadRequest("Search query cannot be empty.");
             }
-
+            
             var courses = await _context.Courses
                 .Where(c => c.CourseName.ToLower().Contains(query.ToLower()) || c.Description.ToLower().Contains(query.ToLower()))
                 .ToListAsync();
-
+            
+            _logger.LogInformation("Found {count} courses", courses.Count);
+        
             return Ok(courses);
         }
         

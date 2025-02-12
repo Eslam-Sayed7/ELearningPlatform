@@ -12,12 +12,14 @@ namespace Infrastructure.Data;
 
 public partial class AppDbContext : IdentityDbContext<AppUser>
 {
+    private readonly ILogger<DbContext> _logger;
     public AppDbContext()
     {
     }
 
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options , ILogger<DbContext> logger) : base(options)
     {
+        _logger = logger;
     }
 
     public virtual DbSet<Category> Categories { get; set; }
@@ -42,6 +44,8 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
         optionsBuilder
             .UseNpgsql("Host=localhost;Port=5442;Database=LMSplatform;Username=postgres;Password=66c#Abi^Xqjj;Pooling=true;MaxPoolSize=200;Timeout=200;KeepAlive=300;")
             .LogTo(Console.WriteLine, LogLevel.Information);
+            
+        _logger.LogInformation("PostgreSQL Database Connection Established");
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
