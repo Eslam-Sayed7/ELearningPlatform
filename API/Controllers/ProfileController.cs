@@ -15,11 +15,13 @@ namespace TestApiJWT.Controllers
     {
         private readonly IStudentService _studentService;
         private readonly IUserService _userService;
+        private readonly ILogger<ProfileController> _logger;
         
-        public ProfileController(IUserService userService, IStudentService studentService)
+        public ProfileController(IUserService userService, IStudentService studentService , ILogger<ProfileController> logger)
         {
             _studentService = studentService;
             _userService = userService;
+            _logger = logger;
         }
 
         
@@ -29,14 +31,16 @@ namespace TestApiJWT.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-        
-            var result = await _studentService.GetStudentByIdAsync(model.id);
+            
+            _logger.LogInformation("GetProfileDetails called with id: {Id}", model.id);
+            
+            var result = await _userService.GetUserByIdAsync(model.id);
 
             var profileresponse = new StudentProfileResponseDto()
             {
-                FirstName = result.Appuser.FirstName,
-                LastName = result.Appuser.LastName,
-                ProfilePictureUrl = result.Appuser.ProfilePicture
+                FirstName = result.FirstName,
+                LastName = result.LastName,
+                ProfilePictureUrl = result.ProfilePicture
             };
             return Ok(profileresponse);
         }
@@ -48,14 +52,14 @@ namespace TestApiJWT.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
         
-            var result = await _studentService.UpdateStudentAsync(model);
+            var result = await _userService.UpdateUserAsync(model);
             
             if (result is null)
                 return Unauthorized();
             var studentresponse  = new StudentProfileResponseDto()
             {
-                FirstName = result.Appuser.FirstName,
-                LastName = result.Appuser.LastName
+                FirstName = result.FirstName,
+                LastName = result.LastName
             };
             return Ok(studentresponse);
         }

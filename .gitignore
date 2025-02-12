@@ -16,9 +16,16 @@ obj/
 
 # Ignore logs, lock files, and backup files
 *.log
+Logs/
 *.lock
 *.bak
 *.tmp
 
 .fake
 .env
+
+# ignore appsettings till adjusting local vars parsing
+appsettings*.json
+# ignore docker files
+Dockerfile
+.dockerignore
