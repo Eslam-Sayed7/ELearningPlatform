@@ -1,4 +1,4 @@
-name: test-after-merge
+name: test-after-push
 
 on:
   push:
@@ -12,12 +12,12 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
     - name: Set up .NET
-      uses: actions/setup-dotnet@v2
+    - uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '8.0.0'  # Adjust as needed
+        dotnet-version: '8.0.0'
 
     - name: Restore dependencies
       run: dotnet restore
