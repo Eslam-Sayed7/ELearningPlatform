@@ -1,0 +1,18 @@
+meta {
+  name: post /api/Enrollment/CheckEnroll
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/Enrollment/CheckEnroll
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "courseId": "",
+    "userId": ""
+  }
+}

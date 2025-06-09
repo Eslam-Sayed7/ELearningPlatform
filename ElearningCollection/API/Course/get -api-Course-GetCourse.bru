@@ -1,0 +1,15 @@
+meta {
+  name: get /api/Course/GetCourse
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/Course/GetCourse
+  body: none
+  auth: none
+}
+
+params:query {
+  ~courseid: 6c513166-cc73-41b3-b850-84d08f6e4b5c
+}

@@ -1,0 +1,27 @@
+meta {
+  name: post /api/Course/AddCourse
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/Course/AddCourse
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "courseName": "corusessss",
+    "description": "course",
+    "level": "1",
+    "price": "200",
+    "duration": "20",
+    "thumbnailUrl": "EXAMPLE.com",
+    "language": "ARABIC"
+  }
+}

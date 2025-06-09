@@ -1,0 +1,22 @@
+meta {
+  name: post /api/Auth/AddRole
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/Auth/AddRole
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "userId": "slama",
+    "role": "Admin"
+  }
+}

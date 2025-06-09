@@ -46,20 +46,6 @@ public class CourseService : ICourseService
                     .Include(c => c.Category));
         
         var course = searchcourse.FirstOrDefault();
-        
-        // return new GetCourseDto()
-        // {
-        //     CourseId = course.CourseId,
-        //     CourseName = course.CourseName,
-        //     Description = course.Description,
-        //     Instructor = instructorName ,
-        //     Level = course.Level,
-        //     CategoryName = course.Category.CategoryName,
-        //     ThumbnailUrl = course.ThumbnailUrl,
-        //     Price = course.Price,
-        //     Duration = course.Duration,
-        //     Language = course.Language
-        // };
         return course;
     }
 
@@ -71,20 +57,23 @@ public class CourseService : ICourseService
             .ApplyOrderBy(q => q.OrderByDescending(c => c.CreatedAt));
         specification.ApplyPaging(1, 12);
         var popularCoursesPaged = await _UnitOfWork.Repository<Course>().FindBySpecificationAsync(specification);
-    
-        IList<CourseCardDto> popularCoursesPagedInDto = new List<CourseCardDto>();  // Corrected initialization
 
-        foreach (var c in popularCoursesPaged)
+        IList<CourseCardDto> popularCoursesPagedInDto = new List<CourseCardDto>(); 
+
+        if (popularCoursesPagedInDto is not null)
         {
-            var courseDto = new CourseCardDto()
+            foreach (var c in popularCoursesPaged)
             {
-                CourseId = c.CourseId,
-                CategoryName = c.Category.CategoryName,
-                CourseName = c.CourseName,
-                ThumbnailUrl = c.ThumbnailUrl,
-                Price = c.Price
-            };
-            popularCoursesPagedInDto.Add(courseDto);  // Use Add instead of Append
+                var courseDto = new CourseCardDto()
+                {
+                    CourseId = c.CourseId,
+                    CategoryName = c.Category?.CategoryName?? string.Empty,
+                    CourseName = c.CourseName,
+                    ThumbnailUrl = c.ThumbnailUrl,
+                    Price = c.Price
+                };
+                popularCoursesPagedInDto.Add(courseDto); 
+            }
         }
 
         return popularCoursesPagedInDto;

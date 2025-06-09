@@ -1,0 +1,18 @@
+meta {
+  name: post /api/Auth/login
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/Auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "eslam894408@gmail.com",
+    "password": "Pa$$w0rd"
+  }
+}

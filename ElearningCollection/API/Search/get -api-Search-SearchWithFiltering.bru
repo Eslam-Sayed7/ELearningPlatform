@@ -1,0 +1,19 @@
+meta {
+  name: get /api/Search/SearchWithFiltering
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/Search/SearchWithFiltering
+  body: none
+  auth: none
+}
+
+params:query {
+  ~query: 
+  ~level: 
+  ~minPrice: 
+  ~maxPrice: 
+  ~language: 
+}

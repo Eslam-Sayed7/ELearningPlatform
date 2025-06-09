@@ -1,0 +1,19 @@
+meta {
+  name: post /api/Profile/Update
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/Profile/Update
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "",
+    "firstName": "",
+    "lastName": ""
+  }
+}

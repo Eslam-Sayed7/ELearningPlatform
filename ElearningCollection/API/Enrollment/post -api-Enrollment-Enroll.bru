@@ -1,0 +1,18 @@
+meta {
+  name: post /api/Enrollment/Enroll
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/Enrollment/Enroll
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "courseId": "",
+    "studentId": ""
+  }
+}

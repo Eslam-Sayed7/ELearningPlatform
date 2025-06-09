@@ -16,9 +16,11 @@ namespace API.Controllers
     {
         private readonly ICourseService _courseService;
         private readonly AppDbContext _context;
-        public CourseController(ICourseService courseService,AppDbContext context)
+        private readonly IRedisCachService _cache;
+        public CourseController(ICourseService courseService,AppDbContext context, IRedisCachService cache)
         {
             _context = context;
+            _cache = cache;
             _courseService = courseService;
         }
 
@@ -31,18 +33,21 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            var courseDto = new GetCourseDto()
-            {
-                CourseId = course.CourseId,
-                CourseName = course.CourseName,
-                Description = course.Description,
-                Level = course.Level,
-                Price = course.Price,
-                Duration = course.Duration,
-                ThumbnailUrl = course.ThumbnailUrl,
-                Language = course.Language,
-                Instructor= $"{course.Instructors.FirstOrDefault().Appuser.FirstName }{course.Instructors.FirstOrDefault().Appuser.LastName}"
-            };
+           var instructor = course.Instructors?.FirstOrDefault();
+           var firstName = instructor?.Appuser?.FirstName ?? "";
+           var lastName = instructor?.Appuser?.LastName ?? "";
+           var courseDto = new GetCourseDto()
+           {
+               CourseId = course.CourseId,
+               CourseName = course.CourseName,
+               Description = course.Description,
+               Level = course.Level,
+               Price = course.Price,
+               Duration = course.Duration,
+               ThumbnailUrl = course.ThumbnailUrl,
+               Language = course.Language,
+               Instructor = $"{firstName} {lastName}"
+           }; 
             return Ok(courseDto);
         }
 
@@ -51,8 +56,13 @@ namespace API.Controllers
         [HttpGet("Popular")]
         public async Task<ActionResult<IEnumerable<CourseCardDto>>> GetCoursesPagse()
         {
-            var courses = await _courseService.GetPopularCoursesPaged();
-
+            var courses = _cache.GetData<IEnumerable<CourseCardDto>>("PopularCourses");
+            if(courses is not null)
+            {
+                return Ok(courses);
+            } 
+            courses = await _courseService.GetPopularCoursesPaged();
+            _cache.SetData("PopularCourses" , courses);
             return Ok(courses);
         }
        

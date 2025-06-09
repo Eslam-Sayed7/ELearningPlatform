@@ -29,6 +29,11 @@ builder.ConfigureLogging();
 
 builder.Services.AddDbContext<AppDbContext>(x =>
     x.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "RedisInstance";
+});
 
 builder.Services.AddHttpContextAccessor();
 
@@ -45,6 +50,7 @@ builder.Services.AddScoped<IEnrollmentService,EnrollmentServices>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddTransient<ICourseService, CourseService>();
 //builder.Services.AddScoped<IPaymentService,PaymentService>();
+builder.Services.AddScoped<IRedisCachService, RedisCacheService>();
 
 builder.Services.AddAuthentication(options =>
 {
