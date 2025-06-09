@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using API.Controllers;
 using Core.Entities;
 using Infrastructure.Data;
+using Infrastructure.Data.Models;
 using Infrastructure.Data.Services;
+using Infrastructure.Dtos;
 
 namespace API.Tests
 {
@@ -57,6 +59,112 @@ namespace API.Tests
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
+        }
+        
+        [Fact]
+        public async Task GetTokenAsync_ReturnsOkResult_WhenLoginIsSuccessful()
+        {
+            // Arrange
+            var tokenRequest = new TokenRequestModel { Email = "user@gmail.com", Password = "pass" };
+            var user = new AppUser { RefreshToken = "token", RefreshTokenExpiryTime = System.DateTime.UtcNow.AddDays(1) };
+            var authModel = new AuthModel
+            {
+                IsAuthenticated = true,
+                User = user,
+                Username = "user",
+                Email = "user@mail.com",
+                Roles = new List<string> { "Student" },
+                Message = "Success"
+            };
+            _mockAuthService.Setup(s => s.LoginAsync(tokenRequest)).ReturnsAsync(authModel);
+
+            // Act
+            var result = await _authController.GetTokenAsync(tokenRequest);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var response = Assert.IsType<LoginResponseDto>(okResult.Value);
+            Assert.True(response.IsAuthenticated);
+            Assert.Equal("user", response.Username);
+        }
+
+        [Fact]
+        public async Task GetTokenAsync_ReturnsUnauthorized_WhenLoginFails()
+        {
+            // Arrange
+            var tokenRequest = new TokenRequestModel();
+            var authModel = new AuthModel { IsAuthenticated = false, Message = "Invalid" };
+            _mockAuthService.Setup(s => s.LoginAsync(tokenRequest)).ReturnsAsync(authModel);
+
+            // Act
+            var result = await _authController.GetTokenAsync(tokenRequest);
+
+            // Assert
+            var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);
+            Assert.Equal("Invalid", unauthorizedResult.Value);
+        } 
+        
+        
+        [Fact]
+        public async Task AddRoleAsync_ReturnsOk_WhenRoleAddedSuccessfully()
+        {
+            // Arrange
+            var addRoleModel = new AddRoleModel { UserId = new Guid(), Role = "Admin" };
+            _mockAuthService.Setup(s => s.AddRoleAsync(addRoleModel)).ReturnsAsync(string.Empty);
+
+            // Act
+            var result = await _authController.AddRoleAsync(addRoleModel);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(addRoleModel, okResult.Value);
+        }
+
+        [Fact]
+        public async Task AddRoleAsync_ReturnsBadRequest_WhenServiceReturnsError()
+        {
+            // Arrange
+            var addRoleModel = new AddRoleModel();
+            _mockAuthService.Setup(s => s.AddRoleAsync(addRoleModel)).ReturnsAsync("Error");
+
+            // Act
+            var result = await _authController.AddRoleAsync(addRoleModel);
+
+            // Assert
+            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal("Error", badRequest.Value);
+        }
+
+        [Fact]
+        public async Task GetRoleAsync_ReturnsOk_WhenRolesExist()
+        {
+            // Arrange
+            var getRoleModel = new GetRoleModel { UserId = "user" };
+            var userRoleDto = new UserRoleDto { Roles = new List<string> { "Admin" } };
+            _mockAuthService.Setup(s => s.GetRoleAsync(getRoleModel)).ReturnsAsync(userRoleDto);
+
+            // Act
+            var result = await _authController.GetRoleAsync(getRoleModel);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var dto = Assert.IsType<UserRoleDto>(okResult.Value);
+            Assert.Contains("Admin", dto.Roles);
+        }
+
+        [Fact]
+        public async Task GetRoleAsync_ReturnsNotFound_WhenNoRoles()
+        {
+            // Arrange
+            var getRoleModel = new GetRoleModel();
+            var userRoleDto = new UserRoleDto { Roles = new List<string>() };
+            _mockAuthService.Setup(s => s.GetRoleAsync(getRoleModel)).ReturnsAsync(userRoleDto);
+
+            // Act
+            var result = await _authController.GetRoleAsync(getRoleModel);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result.Result);
         }
     }
 }
