@@ -33,10 +33,10 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-           var instructor = course.Instructors?.FirstOrDefault();
-           var firstName = instructor?.Appuser?.FirstName ?? "";
-           var lastName = instructor?.Appuser?.LastName ?? "";
-           var courseDto = new GetCourseDto()
+            var instructor = course.Instructors?.FirstOrDefault();
+            var firstName = instructor?.Appuser?.FirstName ?? "";
+            var lastName = instructor?.Appuser?.LastName ?? "";
+            var courseDto = new GetCourseDto()
            {
                CourseId = course.CourseId,
                CourseName = course.CourseName,
@@ -117,6 +117,7 @@ namespace API.Controllers
 
             string fileUrl = "URL to the uploaded file"; // Example
 
+            await Task.CompletedTask; // Dummy await
             return Ok(new { url = fileUrl });
         }
         

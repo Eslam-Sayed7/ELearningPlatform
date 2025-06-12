@@ -12,7 +12,13 @@ post {
 
 body:json {
   {
-    "email": "eslam894408@gmail.com",
+    "email": "admin@gmail.com",
     "password": "Pa$$w0rd"
   }
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  const token = responseData.refreshToken;
+  bru.setEnvVar("authToken", token);
 }

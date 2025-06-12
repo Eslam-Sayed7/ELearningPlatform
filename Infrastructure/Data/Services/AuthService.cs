@@ -136,19 +136,27 @@ namespace Infrastructure.Services.Auth
                 return "Invalid user ID or Role";
 
             if (await _userManager.IsInRoleAsync(user, model.Role))
+            {
+                _logger.Information("User {UserId} is already assigned to role {Role}", model.UserId, model.Role);
                 return "User already assigned to this role";
+            }
 
             var result = await _userManager.AddToRoleAsync(user, model.Role);
-
-            if (!result.Succeeded)
-                return "Something went wrong while adding role";
-
+            if (result == null || !result.Succeeded)
+            {
+                _logger.Error("Failed to add role {Role} to user {UserId}: {Errors}", model.Role, model.UserId, result?.Errors);
+                return "Failed to add role to user";
+            }
             var jwtSecurityToken = await CreateJwtToken(user);
             user.RefreshToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             user.RefreshTokenExpiryTime = jwtSecurityToken.ValidTo;
 
-            await _userManager.UpdateAsync(user);
-
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (updateResult != null && updateResult.Succeeded)
+            {
+                _logger.Information("User {UserId} successfully added to role {Role}", model.UserId, model.Role);
+                _logger.Information("New JWT token created for user {UserId} with expiration at {Expiration}", model.UserId, jwtSecurityToken.ValidTo);
+            }
             return "Role added successfully";
         } 
 
@@ -179,7 +187,7 @@ namespace Infrastructure.Services.Auth
                 issuer: _jwt.Issuer,
                 audience: _jwt.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddDays(_jwt.DurationInDays),
+                expires: DateTime.UtcNow.AddDays(_jwt.DurationInDays),
                 signingCredentials: signingCredentials);
 
             return jwtSecurityToken;

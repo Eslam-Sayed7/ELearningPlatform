@@ -33,18 +33,9 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
     // public virtual DbSet<TextContent> TextContents { get; set; }
     // public virtual DbSet<VideoContent> VideoContents { get; set; }
 
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //     => optionsBuilder.UseSqlite("Data Source=../ELearningPlatform.db");
-    //
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    // => optionsBuilder.UseSqlServer("Server=localhost;Database=ElearningPlatform;User Id=sa;Password=zb?V?o/3?hUg?!Y@p7;TrustServerCertificate=True;");
-    //
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder
-            .UseNpgsql("Host=localhost;Port=5442;Database=LMSplatform;Username=postgres;Password=66c#Abi^Xqjj;Pooling=true;MaxPoolSize=200;Timeout=200;KeepAlive=300;")
-            .LogTo(Console.WriteLine, LogLevel.Information);
-            
+        base.OnConfiguring(optionsBuilder);
         _logger.LogInformation("PostgreSQL Database Connection Established");
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
