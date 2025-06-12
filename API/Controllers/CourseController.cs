@@ -66,7 +66,7 @@ namespace API.Controllers
             return Ok(courses);
         }
        
-        [AllowAnonymous]
+        [Authorize]
         [HttpPost("CoursesByCategory")]
         public async Task<ActionResult<IList<CourseCardDto>>> GetCoursesByCategory(
             [FromBody] FilterByCategoryRequest request)

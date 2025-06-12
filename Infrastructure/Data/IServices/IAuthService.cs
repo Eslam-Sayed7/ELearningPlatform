@@ -10,8 +10,10 @@ namespace Infrastructure.Services.Auth;
 
         Task<AuthModel> LoginAsync(TokenRequestModel model);
 
-        Task<string> AddRoleAsync(AddRoleModel model);
+        Task<AddRoleResult> AddRoleAsync(AddRoleModel model);
 
         Task<UserRoleDto> GetRoleAsync(GetRoleModel model);
+        Task<AuthModel> RefreshTokenAsync(string token);
+        Task<bool> RevokeTokenAsync(string token);
 
     }
