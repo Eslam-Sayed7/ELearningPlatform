@@ -19,6 +19,7 @@ public static class LoggingExtensions
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
+                // .WriteTo.Seq("http://localhost:5341")
                 .WriteTo.File(new JsonFormatter(), Path.Combine(logDirectory, "logs-.txt"), rollingInterval: RollingInterval.Day) 
                 .CreateLogger();
 
