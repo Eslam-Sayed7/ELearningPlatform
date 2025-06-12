@@ -3,3 +3,16 @@ services:
     image: redis:alpine
     ports:
       - "6379:6379"
+  seq:
+    image: datalust/seq:latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_ADMINPASSWORD=${SEQ_FIRSTRUN_ADMINPASSWORD}  
+    ports:
+      - "5341:5341"   
+      - "8080:80" 
+    volumes:
+      - seq-data:/data
+ 
+volumes:
+  seq-data:

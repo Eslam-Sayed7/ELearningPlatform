@@ -19,16 +19,21 @@ using Serilog;
 //using Infrastructure.Services.Pay;
 
 var builder = WebApplication.CreateBuilder(args);
-Env.Load();
+Env.Load(".env");
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
+builder.Services.Configure<JWT>(options  =>
+{
+    options.Key = Environment.GetEnvironmentVariable("JWT__KEY");
+    options.Issuer = Environment.GetEnvironmentVariable("JWT__ISSUER");
+    options.Audience = Environment.GetEnvironmentVariable("JWT__AUDIENCE");
+    options.DurationInDays = int.Parse(Environment.GetEnvironmentVariable("JWT__DURATION") ?? "60");
+});
 builder.ConfigureLogging();
 
-builder.Services.AddDbContext<AppDbContext>(x =>
-    x.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
+builder.Services.AddDbContext<AppDbContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL") ));
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
@@ -66,9 +71,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
-        ValidIssuer = builder.Configuration["JWT:Issuer"],
-        ValidAudience =  builder.Configuration["JWT:Audience"],
-        IssuerSigningKey  = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+        ValidIssuer = Environment.GetEnvironmentVariable("JWT__ISSUER"),
+        ValidAudience =  Environment.GetEnvironmentVariable("JWT__AUDIENCE"),
+        IssuerSigningKey  = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT__KEY")))
     };
 });
 
@@ -78,12 +83,12 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Student", policy => policy.RequireRole("Student"));
     options.AddPolicy("Instructor", policy => policy.RequireRole("Instructor"));
 });
-
-// builder.Services.AddIdentityServices();
+builder.Services.AddIdentityServices();
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
+app.MapIdentityApi<AppUser>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
