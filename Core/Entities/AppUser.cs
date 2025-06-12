@@ -8,8 +8,8 @@ public class AppUser : IdentityUser
     public string? ProfilePicture { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-    public string? RefreshToken { get; set; }
- 
+    public string? Token { get; set; }
+    public List<RefreshToken>? RefreshTokens { get; set; }
     public DateTime? RefreshTokenExpiryTime { get; set; }
 }
 

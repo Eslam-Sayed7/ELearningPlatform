@@ -29,11 +29,11 @@ builder.Services.Configure<JWT>(options  =>
     options.Key = Environment.GetEnvironmentVariable("JWT__KEY");
     options.Issuer = Environment.GetEnvironmentVariable("JWT__ISSUER");
     options.Audience = Environment.GetEnvironmentVariable("JWT__AUDIENCE");
-    options.DurationInDays = int.Parse(Environment.GetEnvironmentVariable("JWT__DURATION") ?? "60");
+    options.DurationInMinutes = int.Parse(Environment.GetEnvironmentVariable("JWT__DURATION") ?? "1");
 });
 builder.ConfigureLogging();
 
-builder.Services.AddDbContext<AppDbContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL") ));
+builder.Services.AddDbContext<AppDbContext>(x => x.UseNpgsql(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION") ));
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
@@ -73,7 +73,8 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true,
         ValidIssuer = Environment.GetEnvironmentVariable("JWT__ISSUER"),
         ValidAudience =  Environment.GetEnvironmentVariable("JWT__AUDIENCE"),
-        IssuerSigningKey  = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT__KEY")))
+        IssuerSigningKey  = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT__KEY"))),
+        ClockSkew = TimeSpan.Zero 
     };
 });
 
@@ -88,7 +89,6 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.MapIdentityApi<AppUser>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -12,7 +12,7 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
         builder.Property(u => u.LastName).HasMaxLength(50);
         builder.Property(u => u.CreatedAt).HasColumnType("timestamp").IsRequired();
         builder.Property(u => u.UpdatedAt).HasColumnType("timestamp").IsRequired();
-        builder.Property(u => u.RefreshToken).HasColumnType("text").IsRequired(false);
+        builder.Property(u => u.Token).HasColumnType("text").IsRequired(false);
     }
             
 }

@@ -1,4 +1,5 @@
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json.Serialization;
 using Core.Entities;
 
 namespace Infrastructure.Data;
@@ -9,5 +10,9 @@ public class AuthModel {
     public string Email { get; set; }
     public List<string> Roles { get; set; }
     public AppUser User { get; set; }
+    public string? Token { get; set; }
+    [JsonIgnore]
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
 
 }
