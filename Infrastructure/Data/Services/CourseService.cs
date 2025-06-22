@@ -98,7 +98,7 @@ public class CourseService : ICourseService
         // Create a new Course entity from the model
         var newCourse = new Course
         {
-            CourseId = Guid.NewGuid(), // Assign a new Guid for the course
+            CourseId = Guid.CreateVersion7(), // Assign a new Guid for the course
             CourseName = model.CourseName,
             Description = model.Description,
             // CategoryId = model.CategoryId, // Assuming you have a CategoryId field in your Course entity
