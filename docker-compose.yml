@@ -1,19 +1,51 @@
+version: '3.8'
+
 services:
   redis:
     image: redis:alpine
     ports:
       - "6379:6379"
+
   seq:
     image: datalust/seq:latest
     environment:
       - ACCEPT_EULA=Y
-      - SEQ_FIRSTRUN_ADMINPASSWORD 
-      - SEQ_USERNAME=
+      - SEQ_FIRSTRUN_ADMINPASSWORD=admin1234
     ports:
-      - "5341:5341"   
-      - "8080:80" 
+      - "5341:5341"
+      - "8080:80"
     volumes:
       - api-logs:/data/ElearnLogs
- 
+
+#  api:
+#    build:
+#      context: ./API
+#    environment:
+#      - ASPNETCORE_ENVIRONMENT=Development
+#      - Seq__ServerUrl=http://seq:5341
+#    ports:
+#      - "5164:5164"
+#    depends_on:
+#      - redis
+#      - seq
+#    networks:
+#      - testnet
+
+  k6:
+    image: grafana/k6
+    volumes:
+      - ./scripts:/scripts
+    working_dir: /scripts
+    entrypoint: /bin/sh
+    tty: true
+    stdin_open: true 
+#    depends_on:
+#      - api
+    networks:
+      - testnet
+
 volumes:
   api-logs:
+
+networks:
+  testnet:

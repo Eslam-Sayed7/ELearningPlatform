@@ -10,7 +10,6 @@ namespace Infrastructure.Data.Services;
 public class UserService : IUserService
 {
     private  readonly IUnitOfWork _unitOfWork;
-    private IUserService _userServiceImplementation;
 
     public UserService(IUnitOfWork unitOfWork)
     {
