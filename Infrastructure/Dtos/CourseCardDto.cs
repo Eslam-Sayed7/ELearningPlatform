@@ -8,7 +8,9 @@ public class CourseCardDto
     public string CourseName { get; set; }
     public string CourseDescription { get; set; }
     public string? Instructor { get; set; }
-    
+    public string Level { get; set; }
+    public int Duration { get; set; }
+    public string Language { get; set; }
     public string CategoryName { get; set; }    
     public string ThumbnailUrl { get; set; }
     public double Price { get; set; }
