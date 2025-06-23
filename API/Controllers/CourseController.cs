@@ -3,7 +3,9 @@ using Infrastructure.Base;
 using Infrastructure.Data;
 using Infrastructure.Data.IServices;
 using Infrastructure.Data.Models;
+using Infrastructure.Data.Queries.CourseQueries;
 using Infrastructure.Dtos;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,38 +18,25 @@ namespace API.Controllers
     {
         private readonly ICourseService _courseService;
         private readonly AppDbContext _context;
-        private readonly IRedisCachService _cache;
-        public CourseController(ICourseService courseService,AppDbContext context, IRedisCachService cache)
+        private readonly IMediator _mediator;
+        public CourseController(ICourseService courseService,AppDbContext context, IMediator mediator)
         {
             _context = context;
-            _cache = cache;
+            _mediator = mediator;
             _courseService = courseService;
         }
 
         [AllowAnonymous]
         [HttpGet("GetCourse")]
-        public async Task<ActionResult<GetCourseDto>> GetCourseById(Guid courseid)  
+        public async Task<ActionResult<CourseCardDto>> GetCourseById(Guid courseid)  
         {
-            var course = await _courseService.GetCourseByIdAsync(courseid);
-            if (course == null)
+            var query = new GetCourseByIdQuery(courseid);
+            var courseDto = await _mediator.Send(query);
+            
+            if (courseDto == null)
             {
                 return NotFound();
             }
-            var instructor = course.Instructors?.FirstOrDefault();
-            var firstName = instructor?.Appuser?.FirstName ?? "";
-            var lastName = instructor?.Appuser?.LastName ?? "";
-            var courseDto = new GetCourseDto()
-           {
-               CourseId = course.CourseId,
-               CourseName = course.CourseName,
-               Description = course.Description,
-               Level = course.Level,
-               Price = course.Price,
-               Duration = course.Duration,
-               ThumbnailUrl = course.ThumbnailUrl,
-               Language = course.Language,
-               Instructor = $"{firstName} {lastName}"
-           }; 
             return Ok(courseDto);
         }
 
@@ -56,14 +45,9 @@ namespace API.Controllers
         [HttpGet("Popular")]
         public async Task<ActionResult<IEnumerable<CourseCardDto>>> GetCoursesPagse()
         {
-            var courses = _cache.GetData<IEnumerable<CourseCardDto>>("PopularCourses");
-            if(courses is not null)
-            {
-                return Ok(courses);
-            } 
-            courses = await _courseService.GetPopularCoursesPaged();
-            _cache.SetData("PopularCourses" , courses);
-            return Ok(courses);
+            var query = new GetPopularCoursesQuery();
+            var result  = await _mediator.Send(query);
+            return Ok(result);
         }
        
         [Authorize]
@@ -129,26 +113,11 @@ namespace API.Controllers
             {
                 return BadRequest("Invalid course data.");
             }
-
-            var newCourse = new AddCourseModel()
-            {
-                CourseName = request.CourseName,
-                Description = request.Description,
-                Level = request.Level,
-                Price = request.Price,
-                Duration = request.Duration,
-                ThumbnailUrl = request.ThumbnailUrl,
-                Language = request.Language,
-                // CreatedAt = DateTime.UtcNow,
-                // UpdatedAt = DateTime.UtcNow
-            };
-
-            var createdCourse = await _courseService.AddCourse(newCourse);
+            var createdCourse = await _courseService.AddCourse(request);
             if (createdCourse == null)
             {
                 return StatusCode(500, "An error occurred while creating the course.");
             }
-
             return Ok(createdCourse);
          }
         

@@ -14,8 +14,12 @@ builder.RegisterStorageService();
 builder.RegisterServices();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddIdentityServices();
+builder.Services.AddMediatR(config  => 
+{
+    config.RegisterServicesFromAssemblies(typeof(Program).Assembly);
+    config.RegisterServicesFromAssemblyContaining<Infrastructure.Data.Services.CourseService>();
+});
 builder.Services.AddControllers();
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

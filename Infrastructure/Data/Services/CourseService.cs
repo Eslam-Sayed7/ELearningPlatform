@@ -1,3 +1,4 @@
+using API.Extensions.Mappings;
 using Core.Entities;
 using Infrastructure.Base;
 using Infrastructure.Data.IServices;
@@ -95,49 +96,14 @@ public class CourseService : ICourseService
             throw new ArgumentNullException(nameof(model));
         }
 
-        // Create a new Course entity from the model
-        var newCourse = new Course
-        {
-            CourseId = Guid.CreateVersion7(), // Assign a new Guid for the course
-            CourseName = model.CourseName,
-            Description = model.Description,
-            // CategoryId = model.CategoryId, // Assuming you have a CategoryId field in your Course entity
-            Level = model.Level,
-            Price = model.Price,
-            Duration = model.Duration,
-            ThumbnailUrl = model.ThumbnailUrl,
-            Language = model.Language,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
-        };
-
-        // Add course sections if provided
-        // foreach (var sectionModel in model.Sections)
-        // {
-        //     var courseSection = new CourseSection
-        //     {
-        //         SectionId = Guid.NewGuid(),
-        //         CourseId = newCourse.CourseId,
-        //         Title = sectionModel.Title,
-        //         SectionSequence = sectionModel.SectionSequence
-        //     };
-        //
-        //     newCourse.CourseSections.Add(courseSection);  // Attach section to the course
-        //
-        //    
-        // }
-
-        // Add the course to the repository
+        var newCourse = model.ToEntity();
+        
         await _UnitOfWork.Repository<Course>().AddAsync(newCourse);
-
-        // Commit all changes
         await _UnitOfWork.CompleteAsync();
-
         return newCourse;
     }
     public async Task<bool> DeleteCourseAsync(string id)
     {
-        // Retrieve the course entity from the database
         var course = await _UnitOfWork.Repository<Course>().FindAsync(c => c.CourseId == new Guid(id));
         var courseEntity = course.FirstOrDefault();
         
@@ -146,19 +112,9 @@ public class CourseService : ICourseService
             return false; // Course not found
         }
 
-        // Remove the course
         await _UnitOfWork.Repository<Course>().DeleteAsync(courseEntity);
-        
-        // Commit the changes to the database
         await _UnitOfWork.CompleteAsync();
-
-        return true; // Return true to indicate successful deletion
+        return true; 
     }
-    // public async Task<> AddSection()
-    // {
-    //     
-    // }
-    //
-    // public async 
 
 }
