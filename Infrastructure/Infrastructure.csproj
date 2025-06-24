@@ -26,8 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Commands\CourseCommands\" />
-    <Folder Include="Data\Commands\StudentCommands\" />
     <Folder Include="Data\Queries\StudentQueries\" />
   </ItemGroup>
 
