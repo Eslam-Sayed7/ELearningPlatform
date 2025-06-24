@@ -4,7 +4,7 @@ using Serilog.Formatting.Json;
 
 public static class LoggingExtensions
 {
-    public static void ConfigureLogging(this WebApplicationBuilder builder)
+    public static void ConfigureLogging(this IHostBuilder host)
     {
         try
         {
@@ -17,13 +17,10 @@ public static class LoggingExtensions
                 Directory.CreateDirectory(logDirectory);
             }
 
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                // .WriteTo.Seq("http://localhost:5341")
-                .WriteTo.File(new JsonFormatter(), Path.Combine(logDirectory, "logs-.txt"), rollingInterval: RollingInterval.Day) 
-                .CreateLogger();
-
-            builder.Host.UseSerilog();
+            host.UseSerilog((context, loggerConfig) =>
+            {
+                loggerConfig.ReadFrom.Configuration(context.Configuration);
+            });
         }
         catch (Exception ex)
         {

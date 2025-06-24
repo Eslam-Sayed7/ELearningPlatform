@@ -9,7 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.RegisterSecurityServices();
-builder.ConfigureLogging();
+builder.Host.ConfigureLogging();
 builder.RegisterStorageService();
 builder.RegisterServices();
 builder.Services.AddHttpContextAccessor();

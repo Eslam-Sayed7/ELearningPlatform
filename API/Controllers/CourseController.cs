@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using API.Extensions.Mappings;
+using Core.Entities;
 using Infrastructure.Base;
 using Infrastructure.Data;
 using Infrastructure.Data.IServices;
@@ -32,12 +33,7 @@ namespace API.Controllers
         {
             var query = new GetCourseByIdQuery(courseid);
             var courseDto = await _mediator.Send(query);
-            
-            if (courseDto == null)
-            {
-                return NotFound();
-            }
-            return Ok(courseDto);
+            return (courseDto == null) ? NotFound() : Ok(courseDto);
         }
 
         
@@ -47,7 +43,7 @@ namespace API.Controllers
         {
             var query = new GetPopularCoursesQuery();
             var result  = await _mediator.Send(query);
-            return Ok(result);
+            return (result is null ) ? NotFound(): Ok(result);
         }
        
         [Authorize]
@@ -62,31 +58,14 @@ namespace API.Controllers
                 .ApplyOrderBy(q => q.OrderByDescending(c => c.CreatedAt));
 
             var courses = await _courseService.GetCoursesByCategory(spec);
-            IList<CourseCardDto> result = new List<CourseCardDto>();
-
-            foreach (var c in courses)
-            {
-                var crs = new CourseCardDto()
-                {
-                    CourseId = c.CourseId,
-                    CourseName = c.CourseName,
-                    CategoryName = c.Category.CategoryName,
-                    ThumbnailUrl = c.ThumbnailUrl,
-                    Price = c.Price
-                };
-                result.Add(crs);
-            }
-            // _logger.LogInformation("Courses by category retrieved successfully");
+            IList<CourseCardDto> result = courses.Select(c =>  c.ToDto()).ToList();
             return ((result.Any()) ? Ok(result) : Ok());
         }
     
-        // Helper method to check if a course exists
         private async Task<bool> CourseExists(Guid id)
         {
             var course = await _courseService.GetCourseByIdAsync(id);
-            if (course is not null)
-                return true;
-            return false;
+            return (course is null) ? false : true;
         }
 
         [Authorize(Roles = "Admin , Instructor , Student")]
@@ -109,17 +88,13 @@ namespace API.Controllers
         [HttpPost("AddCourse")]
         public async Task<ActionResult<Course>> AddCourse([FromBody] AddCourseModel request)
         {
-            if (request == null)
+            if (request is null)
             {
                 return BadRequest("Invalid course data.");
             }
-            var createdCourse = await _courseService.AddCourse(request);
-            if (createdCourse == null)
-            {
-                return StatusCode(500, "An error occurred while creating the course.");
-            }
-            return Ok(createdCourse);
-         }
+            var createdCourse = await _mediator.Send(request);
+            return createdCourse == null ? StatusCode(500, "An error occurred while creating the course.") : Ok(createdCourse);
+        }
         
          // [HttpPost("AddCourse")]
          // public async Task<ActionResult<Course>> AddCourse([FromBody] AddCourseModel model)
@@ -147,7 +122,6 @@ namespace API.Controllers
         [HttpPost("delete")]
         public async Task<IActionResult> DeleteCourse(string id)
         {
-            // Call the service method to delete the course
             var result = await _courseService.DeleteCourseAsync(id);
         
             if (!result)

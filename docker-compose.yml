@@ -10,12 +10,12 @@ services:
     image: datalust/seq:latest
     environment:
       - ACCEPT_EULA=Y
-      - SEQ_FIRSTRUN_ADMINPASSWORD=admin1234
+      - SEQ_STORAGE__MINIMUMFREE=209715200 # 200MB
     ports:
       - "5341:5341"
       - "8080:80"
     volumes:
-      - api-logs:/data/ElearnLogs
+      - api-logs:/mnt/Data/CS/data
 
 #  api:
 #    build:
