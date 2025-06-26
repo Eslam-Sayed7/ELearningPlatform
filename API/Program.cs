@@ -1,4 +1,5 @@
 using API.Extensions;
+using API.Middlewares;
 using DotNetEnv;
 using Serilog;
 
@@ -14,12 +15,10 @@ builder.RegisterStorageService();
 builder.RegisterServices();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddIdentityServices();
-builder.Services.AddMediatR(config  => 
-{
-    config.RegisterServicesFromAssemblies(typeof(Program).Assembly);
-    config.RegisterServicesFromAssemblyContaining<Infrastructure.Data.Services.CourseService>();
-});
+builder.Services.RegisterMediatrChannel();
 builder.Services.AddControllers();
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -31,6 +30,7 @@ if (app.Environment.IsDevelopment())
 // app.ApplyMigrations();
 
 app.UseHttpsRedirection();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.UseSerilogRequestLogging();
 app.UseStaticFiles();
 app.UseDefaultFiles();

@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Commands\StudentCommands\" />
     <Folder Include="Data\Queries\StudentQueries\" />
   </ItemGroup>
 
