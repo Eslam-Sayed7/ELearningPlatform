@@ -2,6 +2,7 @@
 using Core.Entities;
 using Infrastructure.Base;
 using Infrastructure.Data;
+using Infrastructure.Data.Commands.CourseCommands;
 using Infrastructure.Data.IServices;
 using Infrastructure.Data.Models;
 using Infrastructure.Data.Queries.CourseQueries;
@@ -18,11 +19,9 @@ namespace API.Controllers
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
-        private readonly AppDbContext _context;
         private readonly IMediator _mediator;
-        public CourseController(ICourseService courseService,AppDbContext context, IMediator mediator)
+        public CourseController(ICourseService courseService, IMediator mediator)
         {
-            _context = context;
             _mediator = mediator;
             _courseService = courseService;
         }
@@ -86,39 +85,17 @@ namespace API.Controllers
         
         [Authorize(Roles = "Admin , Instructor")]
         [HttpPost("AddCourse")]
-        public async Task<ActionResult<Course>> AddCourse([FromBody] AddCourseModel request)
+        public async Task<ActionResult<CourseCardDto>> AddCourse([FromBody] AddCourseModel request)
         {
             if (request is null)
             {
                 return BadRequest("Invalid course data.");
             }
-            var createdCourse = await _mediator.Send(request);
+            var command = new CreateCourseCommand(request);
+            var createdCourse = await _mediator.Send(command);
             return createdCourse == null ? StatusCode(500, "An error occurred while creating the course.") : Ok(createdCourse);
         }
-        
-         // [HttpPost("AddCourse")]
-         // public async Task<ActionResult<Course>> AddCourse([FromBody] AddCourseModel model)
-         // {
-         //     if (model == null)
-         //     {
-         //         return BadRequest("Invalid course data.");
-         //     }
-         //
-         //     try
-         //     {
-         //         // Call the service to add the course
-         //         var createdCourse = await _courseService.AddCourse(model);
-         //
-         //         // Return the created course as a response
-         //         return CreatedAtAction(nameof(GetCourseById), new { id = createdCourse.CourseId }, createdCourse);
-         //     }
-         //     catch (Exception ex)
-         //     {
-         //         // Handle the exception and return an error response
-         //         return StatusCode(500, $"An error occurred while creating the course: {ex.Message}");
-         //     }
-         // }
-
+         
         [HttpPost("delete")]
         public async Task<IActionResult> DeleteCourse(string id)
         {
