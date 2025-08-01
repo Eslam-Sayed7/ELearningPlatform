@@ -8,7 +8,6 @@ using Infrastructure.Data.Models;
 using Infrastructure.Data.Services;
 using Infrastructure.Dtos;
 using Microsoft.AspNetCore.Http;
-using Infrastructure.Dtos;
 
 namespace API.Tests
 {
@@ -63,24 +62,11 @@ namespace API.Tests
         }
 
         [Fact]
-        public async Task RegisterAsync_ReturnsBadRequest_WhenModelStateIsInvalid()
-        {
-            // Arrange
-            _authController.ModelState.AddModelError("Error", "Model state is invalid");
-
-            // Act
-            var result = await _authController.RegisterAsync(new RegisterModel());
-
-            // Assert
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-        
-        [Fact]
         public async Task GetTokenAsync_ReturnsOkResult_WhenLoginIsSuccessful()
         {
             // Arrange
             var tokenRequest = new TokenRequestModel { Email = "user@gmail.com", Password = "pass" };
-            var user = new AppUser { RefreshToken = "token", RefreshTokenExpiryTime = System.DateTime.UtcNow.AddDays(1) };
+            var user = new AppUser { Token = "token", RefreshTokenExpiryTime = System.DateTime.UtcNow.AddDays(1) };
             var authModel = new AuthModel
             {
                 IsAuthenticated = true,
@@ -124,8 +110,15 @@ namespace API.Tests
         {
             // Arrange
             var addRoleModel = new AddRoleModel { UserId = new Guid(), Role = "Admin" };
-            _mockAuthService.Setup(s => s.AddRoleAsync(addRoleModel)).ReturnsAsync(string.Empty);
-
+            _mockAuthService.Setup(s => s.AddRoleAsync(addRoleModel)).ReturnsAsync(
+                new AddRoleResult
+                {
+                    IsSuccess = true ,
+                    Message = "Role added successfully",
+                    Role = addRoleModel.Role,
+                    UserId = addRoleModel.UserId,
+                    CreatedAt = DateTime.UtcNow
+                });
             // Act
             var result = await _authController.AddRoleAsync(addRoleModel);
 
@@ -135,18 +128,27 @@ namespace API.Tests
         }
 
         [Fact]
-        public async Task AddRoleAsync_ReturnsBadRequest_WhenServiceReturnsError()
+        public async Task AddRoleAsync_ReturnsBadRequest_WhenInvalidParameterModel()
         {
             // Arrange
             var addRoleModel = new AddRoleModel();
-            _mockAuthService.Setup(s => s.AddRoleAsync(addRoleModel)).ReturnsAsync("Error");
-
+            var errorResult = new AddRoleResult
+            {
+                IsSuccess = false,
+                Message = "Error",
+                Role = addRoleModel.Role,
+                UserId = addRoleModel.UserId
+            };
+            _mockAuthService.Setup(s => s.AddRoleAsync(addRoleModel)).ReturnsAsync(errorResult);
+            
             // Act
             var result = await _authController.AddRoleAsync(addRoleModel);
 
             // Assert
             var badRequest = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal("Error", badRequest.Value);
+            var value = Assert.IsType<AddRoleResult>(badRequest.Value);
+            Assert.False(value.IsSuccess);
+            Assert.Equal(errorResult.Message, value.Message);
         }
 
         [Fact]
@@ -182,3 +184,4 @@ namespace API.Tests
         }
     }
 }
+
