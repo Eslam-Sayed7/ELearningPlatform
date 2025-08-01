@@ -56,20 +56,6 @@ namespace API.Controllers
                 RefreshTokenExpiryTime = result.User.RefreshTokenExpiryTime
             };
             return Ok(res);
-            if (addingStudent == null)
-                return BadRequest("Failed to create student profile.");
-            
-            SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiryTime.Value);
-            var res = new LoginResponseDto {
-                Message = result.Message,
-                IsAuthenticated = result.IsAuthenticated,
-                Username = result.Username,
-                Email = result.Email,
-                Roles = result.Roles,
-                Token =  result.User.Token,
-                RefreshTokenExpiryTime = result.User.RefreshTokenExpiryTime
-            };
-            return Ok(res);
         }
         
         [AllowAnonymous]
@@ -90,8 +76,6 @@ namespace API.Controllers
                 Username = result.Username,
                 Email = result.Email,
                 Roles = result.Roles,
-                Token =  result.User.Token,
-                RefreshToken = result.RefreshToken,
                 Token =  result.User.Token,
                 RefreshToken = result.RefreshToken,
                 RefreshTokenExpiryTime = result.User.RefreshTokenExpiryTime
@@ -138,45 +122,6 @@ namespace API.Controllers
             return Ok(result);
         }
         
-        [HttpGet("refreshToken")]
-        public async Task<IActionResult> RefreshToken()
-        {
-            var refreshToken = HttpContext.Request.Cookies["refreshToken"];
-            var result = await _authService.RefreshTokenAsync(refreshToken);
-
-            if (!result.IsAuthenticated)
-                return BadRequest(result);
-
-            SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiryTime.Value);
-            return Ok(result);
-        }
-        
-        [HttpPost("revokeToken")]
-        public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenModel model)
-        {
-            var token =  model.Token ?? HttpContext.Request.Cookies["refreshToken"];
-            if (string.IsNullOrEmpty(token))
-                return BadRequest("token is required!");
-            
-            var result = await _authService.RevokeTokenAsync(token);
-            if (!result)
-                return BadRequest("toke is invalid!");
-
-            HttpContext.Response.Cookies.Delete("refreshToken");
-            return Ok();
-        }
-        private void SetRefreshTokenInCookie(string refreshToken, DateTime expires)
-        {
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Expires = expires.ToLocalTime(),
-                SameSite = SameSiteMode.Lax,
-                Secure = false ,
-                Domain = "elearn" // Set your domain here
-            };
-            HttpContext.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
-        }
         [HttpGet("refreshToken")]
         public async Task<IActionResult> RefreshToken()
         {
